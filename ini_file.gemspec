@@ -10,17 +10,13 @@ Gem::Specification.new do |s|
   s.authors     = ["Jerry D'Antonio"]
   s.email       = ["jerry.dantonio@gmail.com"]
   s.homepage    = "http://www.jerryknowscode.com"
-  s.summary     = %q{Gem project generator.}
-  s.description = %q{Sample project setup for creating a Rubygem, with a project generator.}
+  s.summary     = %q{Manage simple INI files.}
+  s.description = %q{"The INI file format is an informal standard for configuration files for some platforms or software. INI files are simple text files with a basic structure composed of 'sections' and 'properties'." - Wikipedia}
 
   s.files         = Dir['Rakefile', 'README*', 'LICENSE*']
-  s.files        += Dir['{bin,factories,features,lib,spec,tasks}/**/*']
-  s.test_files    = Dir['{spec,features}/**/*']
-  s.bindir        = 'bin'
-  s.executables   = Dir.glob('bin/*').map { |f| File.basename(f) }
+  s.files        += Dir['{bin,lib,spec,tasks}/**/*']
+  s.test_files    = Dir['{spec}/**/*']
   s.require_paths = ['lib', 'lib/ini_file']
-
-  s.default_executable = "ini_file"
 
   # Production dependencies
   
@@ -28,7 +24,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "i18n"
   s.add_dependency "activesupport"
-  s.add_dependency "thor"
 
   # Development dependencies
   
@@ -36,11 +31,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "simplecov"
   s.add_development_dependency "rspec"
-
-  s.add_development_dependency "cucumber"
-  s.add_development_dependency "aruba"
-
-  s.add_development_dependency "factory_girl"
-  s.add_development_dependency "faker"
 
 end

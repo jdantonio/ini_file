@@ -9,5 +9,8 @@ Dir.glob('tasks/**/*.rake').each do|rakefile|
 end
 
 Bundler::GemHelper.install_tasks
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = '-fd --color'
+end
 
 #task :default => [:default_task]
