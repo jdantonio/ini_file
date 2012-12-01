@@ -4,11 +4,33 @@ require 'spec_helper'
 
 describe IniFile do
 
+  subject { IniFile }
+
+  let(:filename) { 'test.ini' }
+
+  let(:contents) do
+<<-INI
+; this is a comment
+INI
+  end
+
   context 'load class method' do
 
-    it 'throws an exception if the file does not exist'
+    context 'file open' do
+
+      it 'throws an exception if the file does not exist' do
+        lambda { subject.load(filename) }.should raise_error
+      end
+
+      it 'throws an exception on inadequate file permissions'
+
+    end
 
     context 'parsing' do
+
+      before(:each) do
+        subject.load(filename)
+      end
 
       context 'properties' do
 
