@@ -100,6 +100,8 @@ describe IniFile do
 
         it 'throws an exception for a duplicate section name'
 
+        it 'throws an exception when a section name is the same as a property key'
+
         it 'ignores the case of the section name'
 
         it 'creates a hierarchy when a section name is delimited by a dot'
@@ -115,6 +117,64 @@ describe IniFile do
       end
 
     end
+
+  end
+
+  context 'attribute readers' do
+
+    it 'converts global property keys to attributes at the root'
+    
+    it 'converts global property values to string values at the root'
+
+    it 'converts section names to attributes at the root'
+
+    it 'converts sections to nested attributes under the root'
+
+    it 'converts section property keys to attributes under the section'
+
+    it 'converts section property values to string values under the section'
+
+    it 'converts section hierarchies to nested section hierarchies'
+
+    it 'ignores case of section names'
+
+    it 'ignores case of section hierarchies'
+
+  end
+
+  context '#[]' do
+
+    it 'converts global property keys to symbols at the root'
+    
+    it 'converts global property values to string values at the root'
+
+    it 'converts section names to symbols at the root'
+
+    it 'converts sections to hash values at the root'
+
+    it 'converts section property keys to symbols in the section hash'
+
+    it 'converts section property values to string values in the section hash'
+
+    it 'converts section hierarchies to hash hierarchies'
+
+  end
+
+  context '#to_hash' do
+
+    it 'converts global property keys to symbols at the root'
+    
+    it 'converts global property values to string values at the root'
+
+    it 'converts section names to symbols at the root'
+
+    it 'converts sections to hash values at the root'
+
+    it 'converts section property keys to symbols in the section hash'
+
+    it 'converts section property values to string values in the section hash'
+
+    it 'converts section hierarchies to hash hierarchies'
 
   end
 
