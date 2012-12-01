@@ -5,6 +5,7 @@ require 'bundler/setup'
 require 'ini_file'
 
 require 'rspec'
+require 'fakefs'
 
 RSpec.configure do |config|
 
