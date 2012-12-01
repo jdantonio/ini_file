@@ -4,6 +4,9 @@ module IniFile
 
   class Contents
 
+    def initialize(contents)
+    end
+
   end
 
 end

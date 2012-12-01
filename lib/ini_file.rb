@@ -7,8 +7,11 @@ module IniFile
   extend self
 
   def load(path)
-    #contents = File.open(path, 'r').read
-    #file.close
+    #contents = File.open(path, 'r') {|f| f.read }
+    file = File.open(path, 'r')
+    contents = file.read
+    file.close
+    return Contents.new(contents)
   end
 
 end
