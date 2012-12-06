@@ -1,6 +1,6 @@
 module IniFile
 
-  private
+  IniFormatError = Class.new(StandardError)
 
   class Contents
 
@@ -9,6 +9,9 @@ module IniFile
       raise ArgumentError.new('contents must be a string') unless contents.is_a? String
       raise ArgumentError.new('contents cannot be blank') if contents.strip.empty?
       parse(contents)
+    end
+
+    def [](key)
     end
 
     private

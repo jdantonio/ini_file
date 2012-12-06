@@ -38,35 +38,82 @@ module IniFile
 
         context 'properties' do
 
-          it 'extracts the key from the left of the delimiter'
+          it 'extracts the key from the left of the delimiter' do
+            subject = Contents.new('key=value')
+            subject[:key].should_not be_nil
+          end
 
-          it 'ignores whitespace before the key'
+          it 'ignores whitespace before the key' do
+            subject = Contents.new('    key=value')
+            subject[:key].should eq 'value'
+          end
 
-          it 'throws an exception on spaces within the key'
+          it 'throws an exception on spaces within the key' do
+            lambda {
+              Contents.new('this is the key=value')
+            }.should_raise(IniFormatError)
+          end
 
-          it 'throws an exception for a duplicate key'
+          it 'throws an exception for a duplicate key' do
+            lambda {
+              Contents.new("key=value1\nkey=value2")
+            }.should_raise(IniFormatError)
+          end
 
-          it 'ignores the case of the key'
+          it 'ignores the case of the key' do
+            subject = Contents.new('KEY=value')
+            subject[:key].should eq 'value'
+          end
 
-          it 'allows an equal sign as the delimiter'
+          it 'allows an equal sign as the delimiter' do
+            subject = Contents.new('key=value')
+            subject[:key].should eq 'value'
+          end
 
-          it 'allows a colon as the delimiter'
+          it 'allows a colon as the delimiter' do
+            subject = Contents.new('key:value')
+            subject[:key].should eq 'value'
+          end
 
-          it 'allows spaces before the delimiter'
+          it 'allows spaces before the delimiter' do
+            subject = Contents.new('key  =value')
+            subject[:key].should eq 'value'
+          end
 
-          it 'allows spaces after the delimiter'
+          it 'allows spaces after the delimiter' do
+            subject = Contents.new('key:   value')
+            subject[:key].should eq 'value'
+          end
 
-          it 'ignores single quotes around the value'
+          it 'ignores single quotes around the value' do
+            subject = Contents.new("key='value'")
+            subject[:key].should eq 'value'
+          end
 
-          it 'ignores double quotes around the value'
+          it 'ignores double quotes around the value' do
+            subject = Contents.new('key="value"')
+            subject[:key].should eq 'value'
+          end
 
-          it 'allows spaces within the value'
+          it 'allows spaces within the value' do
+            subject = Contents.new('key=this is the value')
+            subject[:key].should eq 'this is the value'
+          end
 
-          it 'collapses concurrent space characters within the value into one'
+          it 'collapses concurrent space characters within the value into one' do
+            subject = Contents.new("key=this   is\tthe    value")
+            subject[:key].should eq 'this is the value'
+          end
 
-          it 'preserves the case of the value'
+          it 'preserves the case of the value' do
+            subject = Contents.new('key=This is the VALUE')
+            subject[:key].should eq 'This is the VALUE'
+          end
 
-          it 'allows line continuation when a line ends with a backslash'
+          it 'allows line continuation when a line ends with a backslash' do
+            subject = Contents.new("key=this\\\nvalue")
+            subject[:key].should eq 'this value'
+          end
 
         end
 
