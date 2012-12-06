@@ -163,15 +163,15 @@ module IniFile
           end
 
           it 'ignores blank lines' do
-            pending
-            subject = Contents.new("   \t   ")
-            subject.should be_empty
+            subject = Contents.new("key1=value1\n   \n\t\n  \t key2=value2\n#comment")
+            subject[:key1].should eq 'value1'
+            subject[:key2].should eq 'value2'
           end
 
           it 'ignores empty lines' do
-            pending
-            subject = Contents.new('')
-            subject.should be_empty
+            subject = Contents.new("key1=value1\n\n\n\nkey2=value2")
+            subject[:key1].should eq 'value1'
+            subject[:key2].should eq 'value2'
           end
 
         end
