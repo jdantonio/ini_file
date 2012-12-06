@@ -4,7 +4,8 @@ module IniFile
 
   class Contents
 
-    PROPERTY_PATTERN = /^\s*(\w+)\s*[:=]\s*['"]?([^'"]+)['"]?$/
+    PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*['"]?([^'"]+)['"]?/
+    COMMENT_PATTERN = /([;#].*)/
 
     def initialize(contents)
       raise ArgumentError.new('contents cannot be nil') if contents.nil?
@@ -14,6 +15,10 @@ module IniFile
       parse(contents)
     end
 
+    def empty?
+      return @contents.empty?
+    end
+
     def [](key)
       return @contents[key]
     end
@@ -21,10 +26,16 @@ module IniFile
     private
 
     def parse(contents)
-      contents =~ PROPERTY_PATTERN
-      key = $1.downcase.to_sym
-      value = $2.gsub(/\s+/, ' ')
-      @contents[key] = value
+
+      pattern = /#{PROPERTY_PATTERN}|#{COMMENT_PATTERN}/
+
+      contents.scan(pattern) do |key, value, comment|
+        if key && value
+          key = $1.downcase.to_sym
+          value = $2.gsub(/\s+/, ' ')
+          @contents[key] = value
+        end
+      end
     end
 
   end

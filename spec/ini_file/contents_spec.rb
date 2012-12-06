@@ -150,11 +150,27 @@ module IniFile
 
         context 'comments' do
 
-          it 'ignores lines beginning with a semicolon'
+          it 'ignores lines beginning with a semicolon' do
+            subject = Contents.new(';this is a comment')
+            subject.should be_empty
+          end
 
-          it 'ignores lines beginning with a number sign'
+          it 'ignores lines beginning with a number sign' do
+            subject = Contents.new('#this is a comment')
+            subject.should be_empty
+          end
 
-          it 'ignores blank lines'
+          it 'ignores blank lines' do
+            pending
+            subject = Contents.new("   \t   ")
+            subject.should be_empty
+          end
+
+          it 'ignores empty lines' do
+            pending
+            subject = Contents.new('')
+            subject.should be_empty
+          end
 
         end
 
