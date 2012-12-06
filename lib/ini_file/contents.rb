@@ -6,7 +6,8 @@ module IniFile
 
     PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*(.+)/
     COMMENT_PATTERN = /([;#].*)/
-    SECTION_PATTERN = /\s*\[\s*(\S+)\s*\]\s*/
+    #SECTION_PATTERN = /\s*\[\s*(\S+)\s*\]\s*/
+    SECTION_PATTERN = /\s*\[(.+)\]\s*/
 
     def initialize(contents)
       raise ArgumentError.new('contents cannot be nil') if contents.nil?
@@ -34,13 +35,18 @@ module IniFile
 
       contents.scan(pattern) do |section, key, value, comment|
         if section
-          current = @contents[section.to_sym] = {}
+          section = section.split(/[\.\\]/).first
+          current = @contents[section.strip.downcase.to_sym] = {}
         elsif key && value
           key = key.downcase.to_sym
           value = $1 if value =~ /^"(.+)"$/
           value = $1 if value =~ /^'(.+)'$/
           value = value.gsub(/\s+/, ' ')
           current[key] = value
+        elsif comment
+          # do nothing
+        else
+          # possibly throw exceptions
         end
       end
     end

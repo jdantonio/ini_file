@@ -228,11 +228,16 @@ module IniFile
           end
 
           it 'ignores the case of the section name' do
-            pending
+            subject = Contents.new("[HeAdeR]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a dot' do
             pending
+            subject = Contents.new("[header.subhead]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:subhead][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a backslash' do
