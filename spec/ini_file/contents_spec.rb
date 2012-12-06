@@ -177,8 +177,13 @@ module IniFile
         context 'sections' do
 
           it 'assigns properties before any section headers to the global section' do
-            pending
+            subject = Contents.new("key1=value1\n[header]\nkey2=value2")
+            subject[:key1].should eq 'value1'
           end
+
+          #it 'requires section headers to be enclosed in square brackets' do
+            #pending
+          #end
 
           it 'assigns properties after a section header to that section' do
             subject = Contents.new("[header]\nkey=value")
@@ -186,20 +191,28 @@ module IniFile
             subject[:header][:key].should eq 'value'
           end
 
-          it 'requires section headers to be enclosed in square brackets' do
-            pending
-          end
-
           it 'allows whitespace before the opening bracket' do
-            pending
+            subject = Contents.new("    [header]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:key].should eq 'value'
           end
 
           it 'ignores whitespace between the opening bracket and the header name' do
-            pending
+            subject = Contents.new("[    header]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:key].should eq 'value'
           end
 
           it 'ignores whitespace between the closing bracket and the header name' do
-            pending
+            subject = Contents.new("[header    ]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:key].should eq 'value'
+          end
+
+          it 'allows whitespace after the closing bracket' do
+            subject = Contents.new("[header]    \nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:key].should eq 'value'
           end
 
           it 'throws an exception on spaces within the section name' do

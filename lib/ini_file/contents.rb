@@ -6,7 +6,7 @@ module IniFile
 
     PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*(.+)/
     COMMENT_PATTERN = /([;#].*)/
-    SECTION_PATTERN = /\[(.+)\]/
+    SECTION_PATTERN = /\s*\[\s*(\S+)\s*\]\s*/
 
     def initialize(contents)
       raise ArgumentError.new('contents cannot be nil') if contents.nil?
