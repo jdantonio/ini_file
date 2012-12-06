@@ -178,7 +178,11 @@ module IniFile
 
           it 'assigns properties before any section headers to the global section'
 
-          it 'assigns properties after a section header to that section'
+          it 'assigns properties after a section header to that section' do
+            subject = Contents.new("[header]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:key].should eq 'value'
+          end
 
           it 'requires section headers to be enclosed in square brackets'
 
