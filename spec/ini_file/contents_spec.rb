@@ -88,13 +88,11 @@ module IniFile
           end
 
           it 'ignores single quotes around the value' do
-            pending
             subject = Contents.new("key='value'")
             subject[:key].should eq 'value'
           end
 
           it 'ignores double quotes around the value' do
-            pending
             subject = Contents.new('key="value"')
             subject[:key].should eq 'value'
           end
@@ -224,9 +222,9 @@ module IniFile
           end
 
           it 'supports multiple blank lines' do
-            pending
-            subject = Contents.new("    \n\n\t")
-            subject.should be_empty
+            subject = Contents.new("key1=value1\n\n\n\n\n\nkey2=value2")
+            subject[:key1].should eq 'value1'
+            subject[:key2].should eq 'value2'
           end
 
         end

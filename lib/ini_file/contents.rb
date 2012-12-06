@@ -4,7 +4,7 @@ module IniFile
 
   class Contents
 
-    PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*(.*)?/
+    PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*(.+)/
     COMMENT_PATTERN = /([;#].*)/
 
     def initialize(contents)
@@ -29,10 +29,12 @@ module IniFile
 
       pattern = /^#{PROPERTY_PATTERN}|#{COMMENT_PATTERN}$/
 
-      contents.scan(pattern) do |key, value, comment|
+      contents.scan(pattern) do |key, value|
         if key && value
           key = $1.downcase.to_sym
           value = $2.gsub(/\s+/, ' ')
+          value = $1 if value =~ /^"(.+)"$/
+          value = $1 if value =~ /^'(.+)'$/
           @contents[key] = value
         end
       end
