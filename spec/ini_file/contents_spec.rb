@@ -6,15 +6,11 @@ module IniFile
 
   describe Contents do
 
-    let(:contents) do
-      <<-INI
-; this is a comment
-      INI
-    end
-
     context '#new' do
 
       context 'parameters' do
+
+        let(:contents) { "; this is a comment" }
 
         it 'requires the first argument to be a string' do
           lambda { Contents.new(contents) }.should_not raise_error
