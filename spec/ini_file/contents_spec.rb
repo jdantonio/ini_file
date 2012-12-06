@@ -16,13 +16,25 @@ module IniFile
 
       context 'parameters' do
 
-        it 'requires the first argument to be a string'
+        it 'requires the first argument to be a string' do
+          lambda { Contents.new(contents) }.should_not raise_error
+        end
 
-        it 'throws an exception if the first argument is nil'
+        it 'throws an exception if the first argument is nil' do
+          lambda { Contents.new(nil) }.should raise_error(ArgumentError)
+        end
 
-        it 'throws an exception if the first argument is an empty string'
+        it 'throws an exception if the first argument is an empty string' do
+          lambda { Contents.new('') }.should raise_error(ArgumentError)
+        end
 
-        it 'throws an exception if the first argument is not a string'
+        it 'throws an exception if the first argument is nothing but whitespace' do
+          lambda { Contents.new('    ') }.should raise_error(ArgumentError)
+        end
+
+        it 'throws an exception if the first argument is not a string' do
+          lambda { Contents.new(123) }.should raise_error(ArgumentError)
+        end
 
       end
 
