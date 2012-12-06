@@ -176,7 +176,9 @@ module IniFile
 
         context 'sections' do
 
-          it 'assigns properties before any section headers to the global section'
+          it 'assigns properties before any section headers to the global section' do
+            pending
+          end
 
           it 'assigns properties after a section header to that section' do
             subject = Contents.new("[header]\nkey=value")
@@ -184,31 +186,57 @@ module IniFile
             subject[:header][:key].should eq 'value'
           end
 
-          it 'requires section headers to be enclosed in square brackets'
+          it 'requires section headers to be enclosed in square brackets' do
+            pending
+          end
 
-          it 'allows whitespace before the opening bracket'
+          it 'allows whitespace before the opening bracket' do
+            pending
+          end
 
-          it 'ignores whitespace between the opening bracket and the header name'
+          it 'ignores whitespace between the opening bracket and the header name' do
+            pending
+          end
 
-          it 'ignores whitespace between the closing bracket and the header name'
+          it 'ignores whitespace between the closing bracket and the header name' do
+            pending
+          end
 
-          it 'throws an exception on spaces within the section name'
+          it 'throws an exception on spaces within the section name' do
+            pending
+          end
 
-          it 'throws an exception for a duplicate section name'
+          it 'throws an exception for a duplicate section name' do
+            pending
+          end
 
-          it 'throws an exception when a section name is the same as a property key'
+          it 'throws an exception when a section name is the same as a property key' do
+            pending
+          end
 
-          it 'ignores the case of the section name'
+          it 'ignores the case of the section name' do
+            pending
+          end
 
-          it 'creates a hierarchy when a section name is delimited by a dot'
+          it 'creates a hierarchy when a section name is delimited by a dot' do
+            pending
+          end
 
-          it 'creates a hierarchy when a section name is delimited by a backslash'
+          it 'creates a hierarchy when a section name is delimited by a backslash' do
+            pending
+          end
 
-          it 'creates a hierarchy when a section name is delimited by a forward slash'
+          it 'creates a hierarchy when a section name is delimited by a forward slash' do
+            pending
+          end
 
-          it 'creates a hierarchy when a section name is delimited by a comma'
+          it 'creates a hierarchy when a section name is delimited by a comma' do
+            pending
+          end
 
-          it 'throws an exception when a section name mixes hierarchy delimiters'
+          it 'throws an exception when a section name mixes hierarchy delimiters' do
+            pending
+          end
 
         end
 
