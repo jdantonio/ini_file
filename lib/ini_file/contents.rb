@@ -4,7 +4,7 @@ module IniFile
 
   class Contents
 
-    PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*['"]?([^'"]+)['"]?/
+    PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*(.*)?/
     COMMENT_PATTERN = /([;#].*)/
 
     def initialize(contents)
@@ -27,7 +27,7 @@ module IniFile
 
     def parse(contents)
 
-      pattern = /#{PROPERTY_PATTERN}|#{COMMENT_PATTERN}/
+      pattern = /^#{PROPERTY_PATTERN}|#{COMMENT_PATTERN}$/
 
       contents.scan(pattern) do |key, value, comment|
         if key && value

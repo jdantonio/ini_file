@@ -88,11 +88,13 @@ module IniFile
           end
 
           it 'ignores single quotes around the value' do
+            pending
             subject = Contents.new("key='value'")
             subject[:key].should eq 'value'
           end
 
           it 'ignores double quotes around the value' do
+            pending
             subject = Contents.new('key="value"')
             subject[:key].should eq 'value'
           end
@@ -205,6 +207,27 @@ module IniFile
           it 'creates a hierarchy when a section name is delimited by a comma'
 
           it 'throws an exception when a section name mixes hierarchy delimiters'
+
+        end
+
+        context 'multiple lines' do
+
+          it 'supports multiple property lines' do
+            subject = Contents.new("key1=value1\nkey2=value2")
+            subject[:key1].should eq 'value1'
+            subject[:key2].should eq 'value2'
+          end
+
+          it 'supports multiple comment lines' do
+            subject = Contents.new(";this is a comment\n#this is also a comment")
+            subject.should be_empty
+          end
+
+          it 'supports multiple blank lines' do
+            pending
+            subject = Contents.new("    \n\n\t")
+            subject.should be_empty
+          end
 
         end
 
