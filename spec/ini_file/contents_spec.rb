@@ -49,12 +49,14 @@ module IniFile
           end
 
           it 'throws an exception on spaces within the key' do
+            pending
             lambda {
               Contents.new('this is the key=value')
             }.should_raise(IniFormatError)
           end
 
           it 'throws an exception for a duplicate key' do
+            pending
             lambda {
               Contents.new("key=value1\nkey=value2")
             }.should_raise(IniFormatError)
@@ -111,6 +113,7 @@ module IniFile
           end
 
           it 'allows line continuation when a line ends with a backslash' do
+            pending
             subject = Contents.new("key=this\\\nvalue")
             subject[:key].should eq 'this value'
           end
