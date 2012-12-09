@@ -51,6 +51,7 @@ module IniFile
           # possibly throw exceptions
         end
       end
+      @contents.freeze
     end
 
   end
