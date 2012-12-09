@@ -25,6 +25,11 @@ module IniFile
       return @contents[key]
     end
 
+    def to_hash
+pp @contents
+      return Marshal.load( Marshal.dump(@contents) )
+    end
+
     private
 
     def parse(contents)
@@ -36,8 +41,11 @@ module IniFile
       contents.scan(pattern) do |section, key, value, comment|
         if section
           sections = section.split(/[\.\\\/,]/)
+          current = @contents
           sections.each do |section|
-            current = current[section.strip.downcase.to_sym] = {}
+            section = section.strip.downcase.to_sym
+            current[section] = {} unless current.has_key?(section)
+            current = current[section]
           end
         elsif key && value
           key = key.downcase.to_sym

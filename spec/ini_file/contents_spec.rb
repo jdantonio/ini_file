@@ -269,6 +269,26 @@ module IniFile
             subject[:header][:subhead][:key].should eq 'value'
           end
 
+          it 'does not collide names when a section has subsections' do
+            subject = Contents.new("[header]\nkey1=value1\n[header.subhead]\nkey2=value2")
+            subject[:header].should be_a Hash
+            subject[:header][:key1].should eq 'value1'
+            subject[:header].count.should eq 2
+            subject[:header][:subhead].should be_a Hash
+            subject[:header][:subhead][:key2].should eq 'value2'
+            subject[:header][:subhead].count.should eq 1
+          end
+
+          it 'allows a section to have a subsection with the same name' do
+            subject = Contents.new("[header]\nkey1=value1\n[header.header]\nkey2=value2")
+            subject[:header].should be_a Hash
+            subject[:header][:key1].should eq 'value1'
+            subject[:header].count.should eq 2
+            subject[:header][:header].should be_a Hash
+            subject[:header][:header][:key2].should eq 'value2'
+            subject[:header][:header].count.should eq 1
+          end
+
           it 'throws an exception when a section name mixes hierarchy delimiters' do
             pending
           end
@@ -342,19 +362,65 @@ module IniFile
 
     context '#to_hash' do
 
-      it 'converts global property keys to symbols at the root'
+      let(:contents) do
+        <<-DATA
+          ; this line is a comment
+          KEY1 = value1
+          key2 = "The second value"
 
-      it 'converts global property values to string values at the root'
+          [section_1]
+          key3: value3
 
-      it 'converts section names to symbols at the root'
+          [section_1.sub]
+          key4 = "This is the fourth key"
+        DATA
+      end
 
-      it 'converts sections to hash values at the root'
+      let(:result) do
+        {
+          key1: 'value1',
+          key2: 'The second value',
+          section_1: {
+            key3: 'value3',
+            sub: {
+              key4: 'This is the fourth key'
+            }
+          }
+        }.freeze
+      end
 
-      it 'converts section property keys to symbols in the section hash'
+      subject { Contents.new(contents).to_hash }
 
-      it 'converts section property values to string values in the section hash'
+      it 'converts global property keys to symbols at the root' do
+        subject[:key1].should_not be_nil
+        subject[:key2].should_not be_nil
+      end
 
-      it 'converts section hierarchies to hash hierarchies'
+      it 'converts global property values to string values at the root' do
+        subject[:key1].should eq 'value1'
+        subject[:key2].should eq 'The second value'
+      end
+
+      it 'converts section names to symbols at the root' do
+        subject[:section_1].should_not be_nil
+      end
+
+      it 'converts sections to hash values at the root' do
+        subject[:section_1].should be_a Hash
+      end
+
+      it 'converts section property keys to symbols in the section hash' do
+        subject[:section_1][:key3].should_not be_nil
+      end
+
+      it 'converts section property values to string values in the section hash' do
+        subject[:section_1][:key3].should eq 'value3'
+      end
+
+      it 'converts section hierarchies to hash hierarchies' do
+pp subject
+        subject[:section_1][:sub].should be_a Hash
+      end
 
     end
 
