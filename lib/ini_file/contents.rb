@@ -37,6 +37,7 @@ module IniFile
         if section
           sections = section.split(/[\.\\\/,]/)
           sections.each do |section|
+            current.freeze unless current == @contents
             current = current[section.strip.downcase.to_sym] = {}
           end
         elsif key && value
