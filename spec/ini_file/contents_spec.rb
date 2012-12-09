@@ -351,25 +351,69 @@ module IniFile
 
       context 'attribute readers' do
 
-        it 'converts global property keys to attributes at the root'
+        subject { Contents.new(contents) }
 
-        it 'converts global property values to string values at the root'
+        it 'converts global property keys to attributes at the root' do
+          subject.key1.should_not be_nil
+        end
 
-        it 'ignores case of property keys'
+        it 'converts global property values to string values at the root' do
+          subject.key1.should eq 'value1'
+        end
 
-        it 'converts section names to attributes at the root'
+        it 'ignores case of property keys' do
+          subject.KEY1.should eq 'value1'
+        end
 
-        it 'converts sections to nested attributes under the root'
+        it 'converts section names to attributes at the root' do
+          subject.section_1.should_not be_nil
+        end
 
-        it 'converts section property keys to attributes under the section'
+        it 'converts sections to nested attributes under the root' do
+          subject.section_1[:key3].should eq 'value3'
+        end
 
-        it 'converts section property values to string values under the section'
+        it 'converts section property keys to attributes under the section' do
+          subject.section_1.key3.should eq 'value3'
+        end
 
-        it 'converts section hierarchies to nested section hierarchies'
+        it 'converts section property values to string values under the section' do
+          section = subject.section_1
+          value = subject.section_1.key3
+          subject.section_1.key3.should eq 'value3'
+        end
 
-        it 'ignores case of section names'
+        it 'converts section hierarchies to nested section hierarchies' do
+          subject.section_1.sub.should_not be_nil
+        end
 
-        it 'ignores case of section hierarchies'
+        it 'ignores case of section names' do
+          subject.SECTION_1[:key3].should eq 'value3'
+        end
+
+        it 'ignores case of section hierarchies' do
+          subject.section_1.SUB.should_not be_nil
+        end
+
+        it 'ignores case of property names in section hierarchies' do
+          subject.section_1.sub.KEY4.should eq 'This is the fourth key'
+        end
+
+        it 'throws NoMethodError when accessing a non-existing property' do
+          lambda { subject.bogus }.should raise_error(NoMethodError)
+        end
+
+        it 'throws NoMethodError when accessing a non-existing section' do
+          lambda { subject.bogus[:key1] }.should raise_error(NoMethodError)
+        end
+
+        it 'throws NoMethodError when accessing a non-existing subsection' do
+          lambda { subject.section_1.bogus }.should raise_error(NoMethodError)
+        end
+
+        it 'throws NoMethodError when accessing a non-existing subsection property' do
+          lambda { subject.section_1.sub.bogus }.should raise_error(NoMethodError)
+        end
 
       end
 

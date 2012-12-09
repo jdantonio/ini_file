@@ -29,7 +29,57 @@ module IniFile
       return Marshal.load( Marshal.dump(@contents) )
     end
 
+    def method_missing(method, *args, &block)
+      #super if args.count > 0
+      #super if block
+
+      key = method.to_s.downcase.to_sym
+
+      if @contents.has_key?(key)
+        if @contents[key].is_a? Hash
+          return Node.new(self, key)
+        else
+          return @contents[key]
+        end
+      else
+        super
+      end
+
+    end
+
     private
+
+    class Node
+
+      attr_reader :parent
+      attr_reader :path
+
+      def initialize(parent, *path)
+        @parent = parent
+        @path = path.flatten
+      end
+
+      def [](key)
+        return value[key]
+      end
+
+      def value
+        current = parent
+        path.each { |node| current = current[node] }
+        return current
+      end
+
+      def method_missing(method, *args, &block)
+        key = method.to_s.downcase.to_sym
+        if value[key].is_a? Hash
+          return Node.new(parent, path, method)
+        elsif value[key].nil?
+          super
+        else
+          return value[key]
+        end
+      end
+    end
 
     def parse(contents)
 
