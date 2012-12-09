@@ -234,22 +234,39 @@ module IniFile
           end
 
           it 'creates a hierarchy when a section name is delimited by a dot' do
-            pending
             subject = Contents.new("[header.subhead]\nkey=value")
             subject[:key].should be_nil
             subject[:header][:subhead][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a backslash' do
-            pending
+            subject = Contents.new("[header\\subhead]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:subhead][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a forward slash' do
-            pending
+            subject = Contents.new("[header/subhead]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:subhead][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a comma' do
-            pending
+            subject = Contents.new("[header,subhead]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:subhead][:key].should eq 'value'
+          end
+
+          it 'allows whitespace before the section delimiter' do
+            subject = Contents.new("[header    .subhead]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:subhead][:key].should eq 'value'
+          end
+
+          it 'allows whitespace after the section delimiter' do
+            subject = Contents.new("[header.\t     subhead]\nkey=value")
+            subject[:key].should be_nil
+            subject[:header][:subhead][:key].should eq 'value'
           end
 
           it 'throws an exception when a section name mixes hierarchy delimiters' do

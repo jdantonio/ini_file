@@ -35,8 +35,10 @@ module IniFile
 
       contents.scan(pattern) do |section, key, value, comment|
         if section
-          section = section.split(/[\.\\]/).first
-          current = @contents[section.strip.downcase.to_sym] = {}
+          sections = section.split(/[\.\\\/,]/)
+          sections.each do |section|
+            current = current[section.strip.downcase.to_sym] = {}
+          end
         elsif key && value
           key = key.downcase.to_sym
           value = $1 if value =~ /^"(.+)"$/
