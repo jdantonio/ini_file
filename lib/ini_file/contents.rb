@@ -30,13 +30,15 @@ module IniFile
     end
 
     def method_missing(method, *args, &block)
-      #super if args.count > 0
-      #super if block
 
       key = method.to_s.downcase.to_sym
 
       if @contents.has_key?(key)
-        if @contents[key].is_a? Hash
+        if args.count > 0
+          raise ArgumentError.new("wrong number of arguments(#{args.count} for 0)")
+        elsif block_given?
+          raise ArgumentError.new("block syntax not supported")
+        elsif @contents[key].is_a? Hash
           return Node.new(self, key)
         else
           return @contents[key]
@@ -49,6 +51,9 @@ module IniFile
 
     private
 
+    # :nodoc:
+    #
+    # Helper class for iterating contents using dynamic methods
     class Node
 
       attr_reader :parent

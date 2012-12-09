@@ -349,9 +349,17 @@ module IniFile
         #}.freeze
       #end
 
-      context 'attribute readers' do
+      context 'attribute reader' do
 
         subject { Contents.new(contents) }
+
+        it 'throws an ArgumentError if parameters are passed' do
+          lambda { subject.key1(nil) }.should raise_error(ArgumentError)
+        end
+
+        it 'throws an ArgumentError if a block is provided' do
+          lambda { subject.key1{|x| nil} }.should raise_error(ArgumentError)
+        end
 
         it 'converts global property keys to attributes at the root' do
           subject.key1.should_not be_nil
