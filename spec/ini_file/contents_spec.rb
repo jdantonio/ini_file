@@ -418,7 +418,6 @@ module IniFile
       end
 
       it 'converts section hierarchies to hash hierarchies' do
-pp subject
         subject[:section_1][:sub].should be_a Hash
       end
 

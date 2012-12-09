@@ -26,7 +26,6 @@ module IniFile
     end
 
     def to_hash
-pp @contents
       return Marshal.load( Marshal.dump(@contents) )
     end
 
