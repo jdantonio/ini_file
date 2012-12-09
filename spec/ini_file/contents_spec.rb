@@ -344,19 +344,64 @@ module IniFile
 
     context '#[]' do
 
-      it 'converts global property keys to symbols at the root'
+      let(:contents) do
+        <<-DATA
+          ; this line is a comment
+          KEY1 = value1
+          key2 = "The second value"
 
-      it 'converts global property values to string values at the root'
+          [section_1]
+          key3: value3
 
-      it 'converts section names to symbols at the root'
+          [section_1.sub]
+          key4 = "This is the fourth key"
+        DATA
+      end
 
-      it 'converts sections to hash values at the root'
+      #let(:result) do
+        #{
+          #key1: 'value1',
+          #key2: 'The second value',
+          #section_1: {
+            #key3: 'value3',
+            #sub: {
+              #key4: 'This is the fourth key'
+            #}
+          #}
+        #}.freeze
+      #end
 
-      it 'converts section property keys to symbols in the section hash'
+      subject { Contents.new(contents) }
 
-      it 'converts section property values to string values in the section hash'
+      it 'converts global property keys to symbols at the root' do
+        subject[:key1].should_not be_nil
+        subject[:key2].should_not be_nil
+      end
 
-      it 'converts section hierarchies to hash hierarchies'
+      it 'converts global property values to string values at the root' do
+        subject[:key1].should eq 'value1'
+        subject[:key2].should eq 'The second value'
+      end
+
+      it 'converts section names to symbols at the root' do
+        subject[:section_1].should_not be_nil
+      end
+
+      it 'converts sections to hash values at the root' do
+        subject[:section_1].should be_a Hash
+      end
+
+      it 'converts section property keys to symbols in the section hash' do
+        subject[:section_1][:key3].should_not be_nil
+      end
+
+      it 'converts section property values to string values in the section hash' do
+        subject[:section_1][:key3].should eq 'value3'
+      end
+
+      it 'converts section hierarchies to hash hierarchies' do
+        subject[:section_1][:sub].should be_a Hash
+      end
 
     end
 
@@ -376,18 +421,18 @@ module IniFile
         DATA
       end
 
-      let(:result) do
-        {
-          key1: 'value1',
-          key2: 'The second value',
-          section_1: {
-            key3: 'value3',
-            sub: {
-              key4: 'This is the fourth key'
-            }
-          }
-        }.freeze
-      end
+      #let(:result) do
+        #{
+          #key1: 'value1',
+          #key2: 'The second value',
+          #section_1: {
+            #key3: 'value3',
+            #sub: {
+              #key4: 'This is the fourth key'
+            #}
+          #}
+        #}.freeze
+      #end
 
       subject { Contents.new(contents).to_hash }
 
