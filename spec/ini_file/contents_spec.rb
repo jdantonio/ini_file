@@ -140,7 +140,7 @@ module IniFile
 
           it 'converts \\# into a number sign'
 
-          it 'converts \\= into an equal sign'
+            it 'converts \\= into an equal sign'
 
           it 'converts \\: into a colon'
 
@@ -182,7 +182,7 @@ module IniFile
           end
 
           #it 'requires section headers to be enclosed in square brackets' do
-            #pending
+          #pending
           #end
 
           it 'assigns properties after a section header to that section' do
@@ -320,29 +320,7 @@ module IniFile
 
     end
 
-    context 'attribute reader' do
-
-      it 'converts global property keys to attributes at the root'
-
-      it 'converts global property values to string values at the root'
-
-      it 'converts section names to attributes at the root'
-
-      it 'converts sections to nested attributes under the root'
-
-      it 'converts section property keys to attributes under the section'
-
-      it 'converts section property values to string values under the section'
-
-      it 'converts section hierarchies to nested section hierarchies'
-
-      it 'ignores case of section names'
-
-      it 'ignores case of section hierarchies'
-
-    end
-
-    context '#[]' do
+    context 'accessor methods' do
 
       let(:contents) do
         <<-DATA
@@ -371,103 +349,101 @@ module IniFile
         #}.freeze
       #end
 
-      subject { Contents.new(contents) }
+      context 'attribute readers' do
 
-      it 'converts global property keys to symbols at the root' do
-        subject[:key1].should_not be_nil
-        subject[:key2].should_not be_nil
+        it 'converts global property keys to attributes at the root'
+
+        it 'converts global property values to string values at the root'
+
+        it 'ignores case of property keys'
+
+        it 'converts section names to attributes at the root'
+
+        it 'converts sections to nested attributes under the root'
+
+        it 'converts section property keys to attributes under the section'
+
+        it 'converts section property values to string values under the section'
+
+        it 'converts section hierarchies to nested section hierarchies'
+
+        it 'ignores case of section names'
+
+        it 'ignores case of section hierarchies'
+
       end
 
-      it 'converts global property values to string values at the root' do
-        subject[:key1].should eq 'value1'
-        subject[:key2].should eq 'The second value'
+      context '#[]' do
+
+        subject { Contents.new(contents) }
+
+        it 'converts global property keys to symbols at the root' do
+          subject[:key1].should_not be_nil
+          subject[:key2].should_not be_nil
+        end
+
+        it 'converts global property values to string values at the root' do
+          subject[:key1].should eq 'value1'
+          subject[:key2].should eq 'The second value'
+        end
+
+        it 'converts section names to symbols at the root' do
+          subject[:section_1].should_not be_nil
+        end
+
+        it 'converts sections to hash values at the root' do
+          subject[:section_1].should be_a Hash
+        end
+
+        it 'converts section property keys to symbols in the section hash' do
+          subject[:section_1][:key3].should_not be_nil
+        end
+
+        it 'converts section property values to string values in the section hash' do
+          subject[:section_1][:key3].should eq 'value3'
+        end
+
+        it 'converts section hierarchies to hash hierarchies' do
+          subject[:section_1][:sub].should be_a Hash
+        end
+
       end
 
-      it 'converts section names to symbols at the root' do
-        subject[:section_1].should_not be_nil
-      end
+      context '#to_hash' do
 
-      it 'converts sections to hash values at the root' do
-        subject[:section_1].should be_a Hash
-      end
+        subject { Contents.new(contents).to_hash }
 
-      it 'converts section property keys to symbols in the section hash' do
-        subject[:section_1][:key3].should_not be_nil
-      end
+        it 'converts global property keys to symbols at the root' do
+          subject[:key1].should_not be_nil
+          subject[:key2].should_not be_nil
+        end
 
-      it 'converts section property values to string values in the section hash' do
-        subject[:section_1][:key3].should eq 'value3'
-      end
+        it 'converts global property values to string values at the root' do
+          subject[:key1].should eq 'value1'
+          subject[:key2].should eq 'The second value'
+        end
 
-      it 'converts section hierarchies to hash hierarchies' do
-        subject[:section_1][:sub].should be_a Hash
-      end
+        it 'converts section names to symbols at the root' do
+          subject[:section_1].should_not be_nil
+        end
 
+        it 'converts sections to hash values at the root' do
+          subject[:section_1].should be_a Hash
+        end
+
+        it 'converts section property keys to symbols in the section hash' do
+          subject[:section_1][:key3].should_not be_nil
+        end
+
+        it 'converts section property values to string values in the section hash' do
+          subject[:section_1][:key3].should eq 'value3'
+        end
+
+        it 'converts section hierarchies to hash hierarchies' do
+          subject[:section_1][:sub].should be_a Hash
+        end
+
+      end
     end
-
-    context '#to_hash' do
-
-      let(:contents) do
-        <<-DATA
-          ; this line is a comment
-          KEY1 = value1
-          key2 = "The second value"
-
-          [section_1]
-          key3: value3
-
-          [section_1.sub]
-          key4 = "This is the fourth key"
-        DATA
-      end
-
-      #let(:result) do
-        #{
-          #key1: 'value1',
-          #key2: 'The second value',
-          #section_1: {
-            #key3: 'value3',
-            #sub: {
-              #key4: 'This is the fourth key'
-            #}
-          #}
-        #}.freeze
-      #end
-
-      subject { Contents.new(contents).to_hash }
-
-      it 'converts global property keys to symbols at the root' do
-        subject[:key1].should_not be_nil
-        subject[:key2].should_not be_nil
-      end
-
-      it 'converts global property values to string values at the root' do
-        subject[:key1].should eq 'value1'
-        subject[:key2].should eq 'The second value'
-      end
-
-      it 'converts section names to symbols at the root' do
-        subject[:section_1].should_not be_nil
-      end
-
-      it 'converts sections to hash values at the root' do
-        subject[:section_1].should be_a Hash
-      end
-
-      it 'converts section property keys to symbols in the section hash' do
-        subject[:section_1][:key3].should_not be_nil
-      end
-
-      it 'converts section property values to string values in the section hash' do
-        subject[:section_1][:key3].should eq 'value3'
-      end
-
-      it 'converts section hierarchies to hash hierarchies' do
-        subject[:section_1][:sub].should be_a Hash
-      end
-
-    end
-
   end
-
 end
