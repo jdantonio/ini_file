@@ -122,9 +122,9 @@ module IniFile
           elsif current[key] || key =~ /[\W\s]+/
             raise IniFormatError.new("Property names cannot contain spaces or punctuation: #{key}")
           end
+          value = value.gsub(/\s+/, ' ') unless value =~ /^"(.+)"$/ || value =~ /^'(.+)'$/
           value = $1 if value =~ /^"(.+)"$/
           value = $1 if value =~ /^'(.+)'$/
-          value = value.gsub(/\s+/, ' ')
           current[key] = value
 
         elsif comment
@@ -133,6 +133,7 @@ module IniFile
           # possibly throw exceptions?
         end
       end
+
       @contents.freeze
     end
 

@@ -118,9 +118,14 @@ module IniFile
             subject[:key].should eq 'this is the value'
           end
 
-          it 'collapses concurrent space characters within the value into one' do
+          it 'collapses concurrent space characters within the value' do
             subject = Contents.new("key=this   is\tthe    value")
             subject[:key].should eq 'this is the value'
+          end
+
+          it 'does not collapse concurrent space within quoted values' do
+            subject = Contents.new("key='this   is\tthe    value'")
+            subject[:key].should eq "this   is\tthe    value"
           end
 
           it 'preserves the case of the value' do
