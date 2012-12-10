@@ -4,11 +4,6 @@ module IniFile
 
   class Contents
 
-    PROPERTY_PATTERN = /\s*(\w+)\s*[:=]\s*(.+)/
-    COMMENT_PATTERN = /([;#].*)/
-    #SECTION_PATTERN = /\s*\[\s*(\S+)\s*\]\s*/
-    SECTION_PATTERN = /\s*\[(.+)\]\s*/
-
     def initialize(contents)
       raise ArgumentError.new('contents cannot be nil') if contents.nil?
       raise ArgumentError.new('contents must be a string') unless contents.is_a? String
@@ -88,7 +83,11 @@ module IniFile
 
     def parse(contents)
 
-      pattern = /^#{SECTION_PATTERN}|#{PROPERTY_PATTERN}|#{COMMENT_PATTERN}$/
+      section_pattern = /^\s*\[(.+)\]\s*$/
+      property_pattern = /^\s*(.+)\s*[:=]\s*(.+)$/
+      comment_pattern = /^([;#].*)$/
+
+      pattern = /#{section_pattern}|#{property_pattern}|#{comment_pattern}/
 
       current = @contents
 
@@ -102,7 +101,10 @@ module IniFile
             current = current[section]
           end
         elsif key && value
-          key = key.downcase.to_sym
+          key = key.strip.downcase.to_sym
+          if key =~ /[\W\s]+/
+            raise IniFormatError.new("Invalid key: #{key}")
+          end
           value = $1 if value =~ /^"(.+)"$/
           value = $1 if value =~ /^'(.+)'$/
           value = value.gsub(/\s+/, ' ')

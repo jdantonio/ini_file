@@ -48,18 +48,23 @@ module IniFile
             subject[:key].should eq 'value'
           end
 
-          it 'throws an exception on spaces within the key' do
-            pending
+          it 'throws an exception on whitespace within the key' do
             lambda {
               Contents.new('this is the key=value')
-            }.should_raise(IniFormatError)
+            }.should raise_error(IniFormatError)
+          end
+
+          it 'throws an exception on punctuation within the key' do
+            lambda {
+              Contents.new("the'key=value")
+            }.should raise_error(IniFormatError)
           end
 
           it 'throws an exception for a duplicate key' do
             pending
             lambda {
               Contents.new("key=value1\nkey=value2")
-            }.should_raise(IniFormatError)
+            }.should raise_error(IniFormatError)
           end
 
           it 'ignores the case of the key' do
