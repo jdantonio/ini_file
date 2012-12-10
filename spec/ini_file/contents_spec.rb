@@ -61,7 +61,6 @@ module IniFile
           end
 
           it 'throws an exception for a duplicate key' do
-            pending
             lambda {
               Contents.new("key=value1\nkey=value2")
             }.should raise_error(IniFormatError)
