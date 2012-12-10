@@ -83,7 +83,7 @@ module IniFile
 
     def parse(contents)
 
-      section_pattern = /^\s*\[(.+)\]\s*$/
+      section_pattern = /^\s*\[([^\]]+)\]\s*$/
       property_pattern = /^\s*(.+)\s*[:=]\s*(.+)$/
       comment_pattern = /^([;#].*)$/
 
