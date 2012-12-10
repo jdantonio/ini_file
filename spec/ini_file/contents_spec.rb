@@ -306,7 +306,9 @@ module IniFile
           end
 
           it 'throws an exception when a section name mixes hierarchy delimiters' do
-            pending
+            lambda {
+              Contents.new("[this.is\\the//header]")
+            }.should raise_error(IniFormatError)
           end
 
         end
