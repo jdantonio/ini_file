@@ -100,7 +100,9 @@ module IniFile
           current = @contents
           sections.each do |section|
             section = section.strip.downcase.to_sym
-            if section =~ /[\W\s]+/
+            if section.empty?
+              raise IniFormatError.new("Section names cannot be blank: #{section}")
+            elsif section =~ /[\W\s]+/
               raise IniFormatError.new("Section names cannot contain spaces or punctuation: #{section}")
             elsif current.has_key?(section) && !current[section].is_a?(Hash)
               raise IniFormatError.new("Section name matches existing property name: #{section}")
