@@ -92,12 +92,14 @@ module IniFile
       current = @contents
 
       contents.scan(pattern) do |section, key, value, comment|
+
         if section
           if section.scan(/[\.\\\/,]/).uniq.size > 1
             raise IniFormatError.new("Section hierarchy names must use one delimiter: #{section}")
           end
           sections = section.split(/[\.\\\/,]/)
           current = @contents
+
           sections.each do |section|
             section = section.strip.downcase.to_sym
             if section.empty?
@@ -111,6 +113,7 @@ module IniFile
               current = current[section]
             end
           end
+
         elsif key && value
           key = key.strip.downcase.to_sym
           value = value.strip
@@ -123,10 +126,11 @@ module IniFile
           value = $1 if value =~ /^'(.+)'$/
           value = value.gsub(/\s+/, ' ')
           current[key] = value
+
         elsif comment
           # do nothing
         else
-          # possibly throw exceptions
+          # possibly throw exceptions?
         end
       end
       @contents.freeze
