@@ -144,7 +144,7 @@ module IniFile
 
           it 'converts \\# into a number sign'
 
-            it 'converts \\= into an equal sign'
+          it 'converts \\= into an equal sign'
 
           it 'converts \\: into a colon'
 
@@ -219,16 +219,28 @@ module IniFile
             subject[:header][:key].should eq 'value'
           end
 
-          it 'throws an exception on spaces within the section name' do
-            pending
+          it 'throws an exception on whitespace within the section name' do
+            lambda {
+              Contents.new("[the\theader]\nkey=value")
+            }.should raise_error(IniFormatError)
           end
 
-          it 'throws an exception for a duplicate section name' do
-            pending
+          it 'throws an exception on punctuation within the section name' do
+            lambda {
+              Contents.new("[the'header]\nkey=value")
+            }.should raise_error(IniFormatError)
           end
 
           it 'throws an exception when a section name is the same as a property key' do
-            pending
+            lambda {
+              Contents.new("foo=value1\n[foo]\nkey2=value2")
+            }.should raise_error(IniFormatError)
+          end
+
+          it 'throws an exception on duplicate keys within a section' do
+            lambda {
+              Contents.new("[header]\nfoo=value1\n[header]\nfoo=value2")
+            }.should raise_error(IniFormatError)
           end
 
           it 'ignores the case of the section name' do

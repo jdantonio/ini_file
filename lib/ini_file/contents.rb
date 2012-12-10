@@ -97,13 +97,19 @@ module IniFile
           current = @contents
           sections.each do |section|
             section = section.strip.downcase.to_sym
-            current[section] = {} unless current.has_key?(section)
-            current = current[section]
+            if section =~ /[\W\s]+/
+              raise IniFormatError.new("Invalid section name: #{section}")
+            elsif current.has_key?(section) && !current[section].is_a?(Hash)
+              raise IniFormatError.new("Invalid section name: #{section}")
+            else
+              current[section] = {} unless current.has_key?(section)
+              current = current[section]
+            end
           end
         elsif key && value
           key = key.strip.downcase.to_sym
-          if key =~ /[\W\s]+/
-            raise IniFormatError.new("Invalid key: #{key}")
+          if current[key] || key =~ /[\W\s]+/
+            raise IniFormatError.new("Invalid property name: #{key}")
           end
           value = $1 if value =~ /^"(.+)"$/
           value = $1 if value =~ /^'(.+)'$/
