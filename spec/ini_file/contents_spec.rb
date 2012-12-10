@@ -48,6 +48,12 @@ module IniFile
             subject[:key].should eq 'value'
           end
 
+          it 'throws an exception on a blank key' do
+            lambda {
+              Contents.new('   =value')
+            }.should raise_error(IniFormatError)
+          end
+
           it 'throws an exception on whitespace within the key' do
             lambda {
               Contents.new('this is the key=value')
@@ -99,6 +105,12 @@ module IniFile
           it 'ignores double quotes around the value' do
             subject = Contents.new('key="value"')
             subject[:key].should eq 'value'
+          end
+
+          it 'allows a blank value' do
+            subject = Contents.new('key=')
+            subject.key.should be_empty
+            subject[:key].should be_empty
           end
 
           it 'allows spaces within the value' do

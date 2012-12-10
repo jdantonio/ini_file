@@ -84,7 +84,7 @@ module IniFile
     def parse(contents)
 
       section_pattern = /^\s*\[([^\]]+)\]\s*$/
-      property_pattern = /^\s*(.+)\s*[:=]\s*(.+)$/
+      property_pattern = /^\s*(.+)\s*[:=](.*)$/
       comment_pattern = /^([;#].*)$/
 
       pattern = /#{section_pattern}|#{property_pattern}|#{comment_pattern}/
@@ -113,7 +113,10 @@ module IniFile
           end
         elsif key && value
           key = key.strip.downcase.to_sym
-          if current[key] || key =~ /[\W\s]+/
+          value = value.strip
+          if key.empty?
+            raise IniFormatError.new("Property names cannot be blank: #{key}")
+          elsif current[key] || key =~ /[\W\s]+/
             raise IniFormatError.new("Property names cannot contain spaces or punctuation: #{key}")
           end
           value = $1 if value =~ /^"(.+)"$/
