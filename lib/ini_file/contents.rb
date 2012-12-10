@@ -93,14 +93,17 @@ module IniFile
 
       contents.scan(pattern) do |section, key, value, comment|
         if section
+          if section.scan(/[\.\\\/,]/).uniq.size > 1
+            raise IniFormatError.new("Section hierarchy names must use one delimiter: #{section}")
+          end
           sections = section.split(/[\.\\\/,]/)
           current = @contents
           sections.each do |section|
             section = section.strip.downcase.to_sym
             if section =~ /[\W\s]+/
-              raise IniFormatError.new("Invalid section name: #{section}")
+              raise IniFormatError.new("Section names cannot contain spaces or punctuation: #{section}")
             elsif current.has_key?(section) && !current[section].is_a?(Hash)
-              raise IniFormatError.new("Invalid section name: #{section}")
+              raise IniFormatError.new("Section name matches existing property name: #{section}")
             else
               current[section] = {} unless current.has_key?(section)
               current = current[section]
@@ -109,7 +112,7 @@ module IniFile
         elsif key && value
           key = key.strip.downcase.to_sym
           if current[key] || key =~ /[\W\s]+/
-            raise IniFormatError.new("Invalid property name: #{key}")
+            raise IniFormatError.new("Property names cannot contain spaces or punctuation: #{key}")
           end
           value = $1 if value =~ /^"(.+)"$/
           value = $1 if value =~ /^'(.+)'$/

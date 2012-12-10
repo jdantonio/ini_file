@@ -305,9 +305,13 @@ module IniFile
             subject[:header][:header].count.should eq 1
           end
 
+          it 'throws an exception when a section name is blank'
+
+          it 'throws an exception when a subsection name is blank'
+
           it 'throws an exception when a section name mixes hierarchy delimiters' do
             lambda {
-              Contents.new("[this.is\\the//header]")
+              Contents.new("[this.is\\the/section,header]")
             }.should raise_error(IniFormatError)
           end
 
