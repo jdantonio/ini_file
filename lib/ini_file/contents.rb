@@ -85,13 +85,13 @@ module IniFile
 
       section_pattern = /^\s*\[([^\]]+)\]\s*$/
       property_pattern = /^\s*(.+)\s*[:=](.*)$/
-      comment_pattern = /^([;#].*)$/
+      comment_pattern = /^\s*([;#].*)$/
 
-      pattern = /#{section_pattern}|#{property_pattern}|#{comment_pattern}/
+      pattern = /#{section_pattern}|#{property_pattern}|#{comment_pattern}|^(.*)$/
 
       current = @contents
 
-      contents.scan(pattern) do |section, key, value, comment|
+      contents.scan(pattern) do |section, key, value, comment, garbage|
 
         if section
           if section.scan(/[\.\\\/,]/).uniq.size > 1
@@ -119,16 +119,26 @@ module IniFile
           value = value.strip
           if key.empty?
             raise IniFormatError.new("Property names cannot be blank: #{key}")
-          elsif current[key] || key =~ /[\W\s]+/
+          elsif current[key]
+            raise IniFormatError.new("Duplicate keys are not allowed: #{key}")
+          elsif key =~ /[\W\s]+/
             raise IniFormatError.new("Property names cannot contain spaces or punctuation: #{key}")
           end
           value = value.gsub(/\s+/, ' ') unless value =~ /^"(.+)"$/ || value =~ /^'(.+)'$/
-          value = $1 if value =~ /^"(.+)"$/
-          value = $1 if value =~ /^'(.+)'$/
+          if value =~ /^\d+$/
+            value = value.to_i
+          elsif value =~ /^\d*\.\d+$/
+            value = value.to_f
+          else
+            value = $1 if value =~ /^"(.+)"$/
+            value = $1 if value =~ /^'(.+)'$/
+          end
           current[key] = value
 
         elsif comment
           # do nothing
+        elsif garbage
+          raise IniFormatError.new("Unrecognized pattern: #{garbage}")
         else
           # possibly throw exceptions?
         end

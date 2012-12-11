@@ -181,6 +181,11 @@ module IniFile
             subject.should be_empty
           end
 
+          it 'ignores spaces before the comment indicator' do
+            subject = Contents.new('     # this is a comment')
+            subject.should be_empty
+          end
+
           it 'ignores blank lines' do
             subject = Contents.new("key1=value1\n   \n\t\n  \t key2=value2\n#comment")
             subject[:key1].should eq 'value1'
@@ -361,6 +366,31 @@ module IniFile
             subject[:key2].should eq 'value2'
           end
 
+        end
+
+        context 'garbage' do
+
+          it 'throws an exception when encountering garbage lines' do
+            lambda {
+              Contents.new('this line is garbage')
+            }.should raise_error(IniFormatError)
+          end
+
+        end
+
+        context 'property data types' do
+
+          it 'converts non-quoted integer property values to integers' do
+            subject = Contents.new("key1 = 123")
+            subject[:key1].should be_a Numeric
+            subject[:key1].should eq 123
+          end
+
+          it 'converts non-quoted numeric property values to numbers' do
+            subject = Contents.new("key1 = 123.45")
+            subject[:key1].should be_a Numeric
+            subject[:key1].should be_within(0.1).of(123.45)
+          end
         end
 
       end
