@@ -132,6 +132,8 @@ module IniFile
           else
             value = $1 if value =~ /^"(.+)"$/
             value = $1 if value =~ /^'(.+)'$/
+            value = value.gsub(/\\[0abtrn\\]/) {|s| eval('"%s"' % "#{s}") }
+            value = value.gsub(/\\[ux](\d{4})/) {|s| eval('"%s"' % "\\u#{$1}") }
           end
           current[key] = value
 

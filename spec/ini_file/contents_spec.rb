@@ -143,29 +143,70 @@ module IniFile
 
         context 'escape sequences' do
 
-          it 'converts \\\\ into \\'
+          it "converts \\\\ into \\" do
+            subject = Contents.new("key=this\\\\value")
+            subject[:key].should eq "this\\value"
+          end
 
-          it 'converts \\0 into a null character'
+          it "converts \\0 into a null character" do
+            subject = Contents.new("key=this\\0value")
+            subject[:key].should eq "this\0value"
+          end
 
-          it 'converts \\a into a bell/alert'
+          it "converts \\a into a bell/alert" do
+            subject = Contents.new("key=this\\avalue")
+            subject[:key].should eq "this\avalue"
+          end
 
-          it 'converts \\b into a bell/alert'
+          it "converts \\b into a bell/alert" do
+            subject = Contents.new("key=this\\bvalue")
+            subject[:key].should eq "this\bvalue"
+          end
 
-          it 'converts \\t into a tab'
+          it "converts \\t into a tab" do
+            subject = Contents.new("key=this\\tvalue")
+            subject[:key].should eq "this\tvalue"
+          end
 
-          it 'converts \\r into carriage return'
+          it "converts \\r into carriage return" do
+            subject = Contents.new("key=this\\rvalue")
+            subject[:key].should eq "this\rvalue"
+          end
 
-          it 'converts \\n into a newline'
+          it "converts \\n into a newline" do
+            subject = Contents.new("key=this\\nvalue")
+            subject[:key].should eq "this\nvalue"
+          end
 
-          it 'converts \\; into a semicolon'
+          #it "converts \\; into a semicolon" do
+            #subject = Contents.new("key=this\\;value")
+            #subject[:key].should eq "this;value"
+          #end
 
-          it 'converts \\# into a number sign'
+          #it "converts \\# into a number sign" do
+            #subject = Contents.new("key=this\\#value")
+            #subject[:key].should eq "this#value"
+          #end
 
-          it 'converts \\= into an equal sign'
+          #it "converts \\= into an equal sign" do
+            #subject = Contents.new("key=this\\=value")
+            #subject[:key].should eq "this=value"
+          #end
 
-          it 'converts \\: into a colon'
+          #it "converts \\: into a colon" do
+            #subject = Contents.new("key=this\\:value")
+            #subject[:key].should eq "this:value"
+          #end
 
-          it 'converts \\x???? into a hexidecimal character'
+          it 'converts \\x???? into a hexidecimal character' do
+            subject = Contents.new("key=this\\x1234value")
+            subject[:key].should eq "this\u1234value"
+          end
+
+          it 'converts \\u???? into a hexidecimal character' do
+            subject = Contents.new("key=this\\u1234value")
+            subject[:key].should eq "this\u1234value"
+          end
 
         end
 
