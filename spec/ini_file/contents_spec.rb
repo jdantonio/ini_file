@@ -178,15 +178,15 @@ module IniFile
             subject[:key].should eq "this\nvalue"
           end
 
-          #it "converts \\; into a semicolon" do
-            #subject = Contents.new("key=this\\;value")
-            #subject[:key].should eq "this;value"
-          #end
+          it "converts \\; into a semicolon" do
+            subject = Contents.new("key=this\\;value")
+            subject[:key].should eq "this;value"
+          end
 
-          #it "converts \\# into a number sign" do
-            #subject = Contents.new("key=this\\#value")
-            #subject[:key].should eq "this#value"
-          #end
+          it "converts \\# into a number sign" do
+            subject = Contents.new("key=this\\#value")
+            subject[:key].should eq "this#value"
+          end
 
           #it "converts \\= into an equal sign" do
             #subject = Contents.new("key=this\\=value")
