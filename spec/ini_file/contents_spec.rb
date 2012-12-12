@@ -217,9 +217,29 @@ module IniFile
             subject.should be_empty
           end
 
-          it 'ignores lines beginning with a number sign' do
+          it 'ignores lines beginning with a pound sign' do
             subject = Contents.new('#this is a comment')
             subject.should be_empty
+          end
+
+          it 'ignores inline comments beginning with a semicolon in unquoted values' do
+            subject = Contents.new("key = value ; comment")
+            subject[:key].should eq "value"
+          end
+
+          it 'ignores inline comments beginning with a pound sign in unquoted values' do
+            subject = Contents.new("key = value # comment")
+            subject[:key].should eq "value"
+          end
+
+          it 'does not recognize inline comments beginning with a semicolon in quoted values' do
+            subject = Contents.new("key = \"value ; comment\"")
+            subject[:key].should eq "value ; comment"
+          end
+
+          it 'does not recognize inline comments beginning with a pound sign in quoted values' do
+            subject = Contents.new('key = "value # comment"')
+            subject[:key].should eq 'value # comment'
           end
 
           it 'ignores spaces before the comment indicator' do

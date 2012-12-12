@@ -130,7 +130,11 @@ module IniFile
           elsif value =~ /^\d*\.\d+$/
             value = value.to_f
           else
-            value = $1 || $2 if value =~ /^"(.+)"$|^'(.+)'$/
+            if value =~ /^"(.+)"$|^'(.+)'$/
+              value = $1 || $2
+            else
+              value = value.gsub(/\s*[#;].*$/, '')
+            end
             value = value.gsub(/\\[0abtrn\\]/) {|s| eval('"%s"' % "#{s}") }
             value = value.gsub(/\\[ux](\d{4})/) {|s| eval('"%s"' % "\\u#{$1}") }
           end
