@@ -268,10 +268,6 @@ module IniFile
             subject[:key1].should eq 'value1'
           end
 
-          #it 'requires section headers to be enclosed in square brackets' do
-          #pending
-          #end
-
           it 'assigns properties after a section header to that section' do
             subject = Contents.new("[header]\nkey=value")
             subject[:key].should be_nil
