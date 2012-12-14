@@ -10,8 +10,8 @@ describe IniFile do
   let(:filename) { 'test.ini' }
   let(:contents) { '; this is a comment' }
 
-  def write_ini_file
-    File.open(filename, 'w') {|f| f.write(contents) }
+  def write_ini_file(path = '.')
+    File.open(File.join(path, filename), 'w') {|f| f.write(contents) }
   end
 
   context '#parse' do
@@ -47,6 +47,11 @@ describe IniFile do
       write_ini_file
       IniFile::Contents.should_receive(:new).with(contents)
       subject.load(filename)
+    end
+
+    it 'expands the full file path' do
+      write_ini_file(ENV['HOME'])
+      lambda { subject.load(File.join("~/#{filename}")) }.should_not raise_error
     end
 
     it 'bubbles any exceptions thrown by the Contents constructor' do

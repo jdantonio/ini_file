@@ -10,7 +10,7 @@ module IniFile
   extend self
 
   def load(path, safe = false)
-    contents = File.open(path, 'r') {|f| f.read }
+    contents = File.open(File.expand_path(path), 'r') {|f| f.read }
     return Contents.new(contents)
   rescue
     if safe
