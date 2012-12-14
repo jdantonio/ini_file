@@ -14,7 +14,23 @@ describe IniFile do
     File.open(filename, 'w') {|f| f.write(contents) }
   end
 
-  context '.load' do
+  context '#parse' do
+
+    it 'returns a hash on success' do
+      subject.parse(contents).should be_a Hash
+    end
+
+    it 'bubbles any exceptions thrown by the Parser' do
+      lambda { subject.parse('garbage') }.should raise_error
+    end
+
+    it 'returns nil on error when safe is set to true' do
+      subject.parse('garbage', true).should be_nil
+    end
+
+  end
+
+  context '#load' do
 
     it 'throws an exception if the file does not exist' do
       lambda { subject.load(filename) }.should raise_error

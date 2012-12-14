@@ -19,4 +19,14 @@ module IniFile
       raise $!
     end
   end
+
+  def parse(contents, safe = false)
+    return Parser.parse(contents)
+  rescue
+    if safe
+      return nil
+    else
+      raise $!
+    end
+  end
 end
