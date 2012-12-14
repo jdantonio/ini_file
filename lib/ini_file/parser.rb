@@ -13,8 +13,7 @@ module IniFile
       root = {}
 
       section_pattern = /^\s*\[([^\]]+)\]\s*$/
-      property_pattern = /^\s*(.+)\s*[:=](.*)$/
-      #property_pattern = /^\s*([^:=\r\n]+)\s*[:=]([^\r\n]*)$/
+      property_pattern = /^\s*([^:=\r\n]++)\s*[:=](.*)$/
       comment_pattern = /^\s*([;#].*)$/
 
       pattern = /#{section_pattern}|#{property_pattern}|#{comment_pattern}|^(.*)$/

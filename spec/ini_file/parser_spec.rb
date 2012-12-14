@@ -129,6 +129,16 @@ module IniFile
             ini[:key].should eq 'this is the value'
           end
 
+          it 'allows punctuation within the value' do
+            value = "+refs/heads/*:refs/remotes/origin/*"
+            ini = subject.parse("fetch = #{value}")
+            ini[:fetch].should eq value
+
+            value = "url = git@github.com:jdantonio/ini_file.git"
+            ini = subject.parse("url = #{value}")
+            ini[:url].should eq value
+          end
+
           it 'collapses concurrent space characters within the value' do
             ini = subject.parse("key=this   is\tthe    value")
             ini[:key].should eq 'this is the value'
