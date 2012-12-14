@@ -14,23 +14,19 @@ module IniFile
         [section_1]
         key3: value3
 
-        [section_1.sub]
-        key4 = "This is the fourth key"
+        [section_1.sub_1]
+        sub_1_key: 'This is the subsection key'
+
+        [section_1/sub_1/sub_2]
+        key: value
+
+        [section_1 \ sub_1 \ sub_2 \ sub_3]
+        key: value
+
+        [section_1,sub_1,sub_2,sub_3,sub_4]
+        key: value
       DATA
     end
-
-    #let(:result) do
-      #{
-        #key1: 'value1',
-        #key2: 'The second value',
-        #section_1: {
-          #key3: 'value3',
-          #sub: {
-            #key4: 'This is the fourth key'
-          #}
-        #}
-      #}.freeze
-    #end
 
     context '#new' do
 
@@ -91,7 +87,7 @@ module IniFile
         end
 
         it 'converts section hierarchies to nested section hierarchies' do
-          subject.section_1.sub.should_not be_nil
+          subject.section_1.sub_1.sub_2.sub_3.sub_4.should_not be_nil
         end
 
         it 'ignores case of section names' do
@@ -99,11 +95,11 @@ module IniFile
         end
 
         it 'ignores case of section hierarchies' do
-          subject.section_1.SUB.should_not be_nil
+          subject.section_1.SUB_1.should_not be_nil
         end
 
         it 'ignores case of property names in section hierarchies' do
-          subject.section_1.sub.KEY4.should eq 'This is the fourth key'
+          subject.section_1.sub_1.SUB_1_KEY.should eq 'This is the subsection key'
         end
 
         it 'throws NoMethodError when accessing a non-existing property' do
@@ -142,8 +138,8 @@ module IniFile
           subject[:section_1].should_not be_nil
         end
 
-        it 'converts sections to hash values at the root' do
-          subject[:section_1].should be_a Hash
+        it 'converts sections to nodes' do
+          subject[:section_1].should be_kind_of IniFile::Contents::Node
         end
 
         it 'converts section property keys to symbols in the section hash' do
@@ -154,8 +150,12 @@ module IniFile
           subject[:section_1][:key3].should eq 'value3'
         end
 
-        it 'converts section hierarchies to hash hierarchies' do
-          subject[:section_1][:sub].should be_a Hash
+        it 'converts section hierarchies to node hierarchies' do
+          subject[:section_1].should be_kind_of IniFile::Contents::Node
+          subject[:section_1][:sub_1].should be_kind_of IniFile::Contents::Node
+          subject[:section_1][:sub_1][:sub_2].should be_kind_of IniFile::Contents::Node
+          subject[:section_1][:sub_1][:sub_2][:sub_3].should be_kind_of IniFile::Contents::Node
+          subject[:section_1][:sub_1][:sub_2][:sub_3][:sub_4].should be_kind_of IniFile::Contents::Node
         end
 
       end
@@ -191,7 +191,7 @@ module IniFile
         end
 
         it 'converts section hierarchies to hash hierarchies' do
-          subject[:section_1][:sub].should be_a Hash
+          subject[:section_1][:sub_1][:sub_2][:sub_3][:sub_4].should be_a Hash
         end
 
       end
@@ -228,6 +228,7 @@ module IniFile
 
       let(:keys) { [ :key1, :key2 ] }
       let(:sections) { [ :section_1, :section_2 ] }
+      let(:section_keys) { [ :key1_1, :key1_2, :key1_3, :key1_4 ] }
       let(:subsections) { [ :sub_1, :sub_2 ] }
 
       subject { Contents.new(contents) }
@@ -277,7 +278,28 @@ module IniFile
       end
 
       context '#each for sections' do
-        pending
+
+        it 'iterates over each key/value pair in the given section' do
+          pending
+          subject.section_1.each do |key, value|
+            section_keys.should include key
+          end
+        end
+
+        it 'returns the value associated with the current key' do
+          pending
+          subject.section_1.each do |key, value|
+            subject.section_1[key].should eq value
+          end
+        end
+
+        it 'does not iterate over subsections of the given section' do
+          pending
+          subject[:section_1].each do |key, value|
+            section_keys.should_not include key
+          end
+        end
+
       end
 
     end

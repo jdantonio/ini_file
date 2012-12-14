@@ -13,7 +13,11 @@ module IniFile
     end
 
     def [](key)
-      return @contents[key]
+      if @contents[key].is_a? Hash
+        return Node.new(self, key)
+      else
+        return @contents[key]
+      end
     end
 
     def to_hash
@@ -72,11 +76,16 @@ module IniFile
       end
 
       def [](key)
-        return value[key]
+        current = value[key]
+        if current.is_a? Hash
+          return Node.new(parent, path, key)
+        else
+          return current
+        end
       end
 
       def value
-        current = parent
+        current = parent.instance_variable_get(:@contents)
         path.each { |node| current = current[node] }
         return current
       end
