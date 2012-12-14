@@ -246,7 +246,7 @@ module IniFile
           end
         end
 
-        it 'does not iterate over the sections' do
+        it 'does not iterate over sections at the root' do
           subject.each do |key, value|
             sections.should_not include key
           end
@@ -255,7 +255,25 @@ module IniFile
       end
 
       context '#each_section' do
-        pending
+
+        it 'iterates over each section in the root' do
+          subject.each_section do |section|
+            sections.should include section.name
+          end
+        end
+
+        it 'returns the node associated with the current section' do
+          subject.each_section do |section|
+            section.should be_kind_of IniFile::Contents::Node
+          end
+        end
+
+        it 'does not iterate over properties at the root' do
+          subject.each_section do |section|
+            keys.should_not include section.name
+          end
+        end
+
       end
 
       context '#each for sections' do

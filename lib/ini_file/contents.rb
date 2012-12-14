@@ -26,6 +26,12 @@ module IniFile
       end
     end
 
+    def each_section(&block)
+      @contents.each do |key, value|
+        yield(Node.new(self, key)) if value.is_a? Hash
+      end
+    end
+
     def method_missing(method, *args, &block)
 
       key = method.to_s.downcase.to_sym
@@ -59,6 +65,10 @@ module IniFile
       def initialize(parent, *path)
         @parent = parent
         @path = path.flatten
+      end
+
+      def name
+        @path.first
       end
 
       def [](key)
