@@ -4,6 +4,8 @@ require "ini_file/contents"
 require "ini_file/parser"
 require "ini_file/version"
 
+# http://en.wikipedia.org/wiki/INI_file
+
 module IniFile
   extend self
 
