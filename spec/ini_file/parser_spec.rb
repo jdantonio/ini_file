@@ -72,6 +72,16 @@ module IniFile
             }.should raise_error(IniFormatError)
           end
 
+          it 'allows underscores in the key' do
+            ini = subject.parse('main_window_maximized=value')
+            ini[:main_window_maximized].should eq 'value'
+          end
+
+          it 'converts dashes in the key to underscores' do
+            ini = subject.parse('main-window-maximized=value')
+            ini[:main_window_maximized].should eq 'value'
+          end
+
           it 'throws an exception on punctuation within the key' do
             lambda {
               subject.parse("the'key=value")

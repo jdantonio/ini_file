@@ -49,7 +49,7 @@ module IniFile
           end
 
         elsif key && value
-          key = key.strip.downcase.to_sym
+          key = key.strip.downcase.gsub(/-/, '_').to_sym
           value = value.strip
           if key.empty?
             raise IniFormatError.new("Property names cannot be blank: #{key}")
