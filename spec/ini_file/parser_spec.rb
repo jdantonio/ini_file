@@ -253,14 +253,24 @@ module IniFile
             ini[:key].should eq "value"
           end
 
-          it 'does not recognize inline comments beginning with a semicolon in quoted values' do
+          it 'allows inline comments beginning with a semicolon in quoted values' do
             ini = subject.parse("key = \"value ; comment\"")
             ini[:key].should eq "value ; comment"
           end
 
-          it 'does not recognize inline comments beginning with a pound sign in quoted values' do
+          it 'allows inline comments beginning with a pound sign in quoted values' do
             ini = subject.parse('key = "value # comment"')
             ini[:key].should eq 'value # comment'
+          end
+
+          it 'allows equal signs within comments' do
+            ini = subject.parse('  ;editor = mate -w')
+            ini.should be_empty
+          end
+
+          it 'allows colons within comments' do
+            ini = subject.parse('  #editor = mate -w')
+            ini.should be_empty
           end
 
           it 'ignores spaces before the comment indicator' do
