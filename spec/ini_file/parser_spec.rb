@@ -8,7 +8,7 @@ module IniFile
 
     context '#parse' do
 
-      context 'method parameters' do
+      context 'method call' do
 
         let(:contents) { "; this is a comment" }
 
@@ -34,19 +34,19 @@ module IniFile
 
       end
 
-      context 'returns' do
+      context 'return value' do
 
-        specify 'a hash on success' do
+        it 'is a hash on success' do
           subject.parse('key=value').should be_a Hash
         end
 
-        specify 'an empty hash when the content is only comments' do
+        it 'is an empty hash when the content is only comments' do
           subject.parse('; this is a comment').should be_empty
         end
 
       end
 
-      context 'contents' do
+      context 'content' do
 
         context 'properties' do
 
