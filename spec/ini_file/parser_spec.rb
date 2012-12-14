@@ -209,16 +209,6 @@ module IniFile
             ini[:key].should eq "this#value"
           end
 
-          #it "converts \\= into an equal sign" do
-          #ini = subject.parse("key=this\\=value")
-          #ini[:key].should eq "this=value"
-          #end
-
-          #it "converts \\: into a colon" do
-          #ini = subject.parse("key=this\\:value")
-          #ini[:key].should eq "this:value"
-          #end
-
           it 'converts \\x???? into a hexidecimal character' do
             ini = subject.parse("key=this\\x1234value")
             ini[:key].should eq "this\u1234value"
