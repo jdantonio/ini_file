@@ -309,11 +309,11 @@ module IniFile
             ini[:header][:key].should eq 'value'
           end
 
-          it 'throws an exception on whitespace within the section name' do
-            lambda {
-              subject.parse("[the\theader]\nkey=value")
-            }.should raise_error(IniFormatError)
-          end
+          #it 'throws an exception on whitespace within the section name' do
+            #lambda {
+              #subject.parse("[the\theader]\nkey=value")
+            #}.should raise_error(IniFormatError)
+          #end
 
           it 'throws an exception on punctuation within the section name' do
             lambda {
@@ -359,6 +359,12 @@ module IniFile
 
           it 'creates a hierarchy when a section name is delimited by a comma' do
             ini = subject.parse("[header,subhead]\nkey=value")
+            ini[:key].should be_nil
+            ini[:header][:subhead][:key].should eq 'value'
+          end
+
+          it 'creates a hierarchy when a section name is delimited by whitespace' do
+            ini = subject.parse("[header subhead]\nkey=value")
             ini[:key].should be_nil
             ini[:header][:subhead][:key].should eq 'value'
           end

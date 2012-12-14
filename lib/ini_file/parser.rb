@@ -27,15 +27,19 @@ module IniFile
           if section.scan(/[\.\\\/,]/).uniq.size > 1
             raise IniFormatError.new("Section hierarchy names must use one delimiter: #{section}")
           end
-          sections = section.split(/[\.\\\/,]/)
+          sections = section.strip.split(/\s*[\.\\\/,\s]{1}\s*/)
+          if sections.empty?
+            raise IniFormatError.new("Section names cannot be blank: #{section}")
+          end
+
           current = root
 
           sections.each do |section|
             section = section.strip.downcase.to_sym
             if section.empty?
               raise IniFormatError.new("Section names cannot be blank: #{section}")
-            elsif section =~ /[\W\s]+/
-              raise IniFormatError.new("Section names cannot contain spaces or punctuation: #{section}")
+            elsif section =~ /[\W]+/
+              raise IniFormatError.new("Section names cannot contain punctuation: #{section}")
             elsif current.has_key?(section) && !current[section].is_a?(Hash)
               raise IniFormatError.new("Section name matches existing property name: #{section}")
             else
