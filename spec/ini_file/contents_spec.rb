@@ -9,6 +9,7 @@ module IniFile
         ; this line is a comment
         KEY1 = value1
         key2 = "The second value"
+        the-third-key = 3
 
         [section_1]
         key3: value3
@@ -65,6 +66,10 @@ module IniFile
 
         it 'ignores case of property keys' do
           subject.KEY1.should eq 'value1'
+        end
+
+        it 'replaces dashes in the key name with underscores' do
+          subject.the_third_key.should eq 3
         end
 
         it 'converts section names to attributes at the root' do
