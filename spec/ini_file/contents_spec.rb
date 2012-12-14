@@ -4,44 +4,44 @@ module IniFile
 
   describe Contents do
 
+    let(:contents) do
+      <<-DATA
+        ; this line is a comment
+        KEY1 = value1
+        key2 = "The second value"
+
+        [section_1]
+        key3: value3
+
+        [section_1.sub]
+        key4 = "This is the fourth key"
+      DATA
+    end
+
+    #let(:result) do
+      #{
+        #key1: 'value1',
+        #key2: 'The second value',
+        #section_1: {
+          #key3: 'value3',
+          #sub: {
+            #key4: 'This is the fourth key'
+          #}
+        #}
+      #}.freeze
+    #end
+
     context '#new' do
 
       it 'calls Parser.parse with the contents' do
-        contents = 'key=value'
-        Parser.should_receive(:parse).with(contents)
-        Contents.new(contents)
+        ini_contents = 'key=value'
+        Parser.should_receive(:parse).with(ini_contents)
+        Contents.new(ini_contents)
       end
 
     end
 
     context 'accessor methods' do
-
-      let(:contents) do
-        <<-DATA
-          ; this line is a comment
-          KEY1 = value1
-          key2 = "The second value"
-
-          [section_1]
-          key3: value3
-
-          [section_1.sub]
-          key4 = "This is the fourth key"
-        DATA
-      end
-
-      #let(:result) do
-        #{
-          #key1: 'value1',
-          #key2: 'The second value',
-          #section_1: {
-            #key3: 'value3',
-            #sub: {
-              #key4: 'This is the fourth key'
-            #}
-          #}
-        #}.freeze
-      #end
 
       context 'attribute reader' do
 
@@ -190,6 +190,23 @@ module IniFile
         end
 
       end
+
+    end
+
+    context 'iterators' do
+
+      context '#each' do
+        pending
+      end
+
+      context '#each_section' do
+        pending
+      end
+
+      context '#each for sections' do
+        pending
+      end
+
     end
   end
 end
