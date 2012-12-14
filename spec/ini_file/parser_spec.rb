@@ -275,55 +275,55 @@ module IniFile
         context 'sections' do
 
           it 'assigns properties before any section headers to the global section' do
-            ini = subject.parse("key1=value1\n[header]\nkey2=value2")
+            ini = subject.parse("key1=value1\n[section]\nkey2=value2")
             ini[:key1].should eq 'value1'
           end
 
           it 'assigns properties after a section header to that section' do
-            ini = subject.parse("[header]\nkey=value")
+            ini = subject.parse("[section]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
           it 'allows whitespace before the opening bracket' do
-            ini = subject.parse("    [header]\nkey=value")
+            ini = subject.parse("    [section]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
-          it 'ignores whitespace between the opening bracket and the header name' do
-            ini = subject.parse("[    header]\nkey=value")
+          it 'ignores whitespace between the opening bracket and the section name' do
+            ini = subject.parse("[    section]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
-          it 'ignores whitespace between the closing bracket and the header name' do
-            ini = subject.parse("[header    ]\nkey=value")
+          it 'ignores whitespace between the closing bracket and the section name' do
+            ini = subject.parse("[section    ]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
           it 'allows whitespace after the closing bracket' do
-            ini = subject.parse("[header]    \nkey=value")
+            ini = subject.parse("[section]    \nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
           it 'allows section names to be enclosed in double quotes' do
-            ini = subject.parse("[ \"header\" ]\nkey=value")
+            ini = subject.parse("[ \"section\" ]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
           it 'allows section names to be enclosed in single quotes' do
-            ini = subject.parse("[ 'header' ]\nkey=value")
+            ini = subject.parse("[ 'section' ]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
           it 'throws an exception on punctuation within the section name' do
             lambda {
-              subject.parse("[the'header]\nkey=value")
+              subject.parse("[the'section]\nkey=value")
             }.should raise_error(IniFormatError)
           end
 
@@ -335,76 +335,76 @@ module IniFile
 
           it 'throws an exception on duplicate keys within a section' do
             lambda {
-              subject.parse("[header]\nfoo=value1\n[header]\nfoo=value2")
+              subject.parse("[section]\nfoo=value1\n[section]\nfoo=value2")
             }.should raise_error(IniFormatError)
           end
 
           it 'ignores the case of the section name' do
-            ini = subject.parse("[HeAdeR]\nkey=value")
+            ini = subject.parse("[SeCtIoN]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:key].should eq 'value'
+            ini[:section][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a dot' do
-            ini = subject.parse("[header.subhead]\nkey=value")
+            ini = subject.parse("[section.subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a backslash' do
-            ini = subject.parse("[header\\subhead]\nkey=value")
+            ini = subject.parse("[section\\subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a forward slash' do
-            ini = subject.parse("[header/subhead]\nkey=value")
+            ini = subject.parse("[section/subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by a comma' do
-            ini = subject.parse("[header,subhead]\nkey=value")
+            ini = subject.parse("[section,subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'creates a hierarchy when a section name is delimited by whitespace' do
-            ini = subject.parse("[header subhead]\nkey=value")
+            ini = subject.parse("[section subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'allows whitespace before the section delimiter' do
-            ini = subject.parse("[header    .subhead]\nkey=value")
+            ini = subject.parse("[section    .subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'allows whitespace after the section delimiter' do
-            ini = subject.parse("[header.\t     subhead]\nkey=value")
+            ini = subject.parse("[section.\t     subsection]\nkey=value")
             ini[:key].should be_nil
-            ini[:header][:subhead][:key].should eq 'value'
+            ini[:section][:subsection][:key].should eq 'value'
           end
 
           it 'does not collide names when a section has subsections' do
-            ini = subject.parse("[header]\nkey1=value1\n[header.subhead]\nkey2=value2")
-            ini[:header].should be_a Hash
-            ini[:header][:key1].should eq 'value1'
-            ini[:header].count.should eq 2
-            ini[:header][:subhead].should be_a Hash
-            ini[:header][:subhead][:key2].should eq 'value2'
-            ini[:header][:subhead].count.should eq 1
+            ini = subject.parse("[section]\nkey1=value1\n[section.subsection]\nkey2=value2")
+            ini[:section].should be_a Hash
+            ini[:section][:key1].should eq 'value1'
+            ini[:section].count.should eq 2
+            ini[:section][:subsection].should be_a Hash
+            ini[:section][:subsection][:key2].should eq 'value2'
+            ini[:section][:subsection].count.should eq 1
           end
 
           it 'allows a section to have a subsection with the same name' do
-            ini = subject.parse("[header]\nkey1=value1\n[header.header]\nkey2=value2")
-            ini[:header].should be_a Hash
-            ini[:header][:key1].should eq 'value1'
-            ini[:header].count.should eq 2
-            ini[:header][:header].should be_a Hash
-            ini[:header][:header][:key2].should eq 'value2'
-            ini[:header][:header].count.should eq 1
+            ini = subject.parse("[section]\nkey1=value1\n[section.section]\nkey2=value2")
+            ini[:section].should be_a Hash
+            ini[:section][:key1].should eq 'value1'
+            ini[:section].count.should eq 2
+            ini[:section][:section].should be_a Hash
+            ini[:section][:section][:key2].should eq 'value2'
+            ini[:section][:section].count.should eq 1
           end
 
           it 'throws an exception when a section name is blank' do
@@ -415,7 +415,7 @@ module IniFile
 
           it 'throws an exception when a subsection name is blank' do
             lambda {
-              subject.parse("[head..subhead]")
+              subject.parse("[head..subsection]")
             }.should raise_error(IniFormatError)
           end
 
