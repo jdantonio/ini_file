@@ -35,6 +35,7 @@ module IniFile
           current = root
 
           sections.each do |section|
+            section = $1 || $2 if section =~ /^"([^"]+)"$|^'([^']+)'$/
             section = section.strip.downcase.to_sym
             if section.empty?
               raise IniFormatError.new("Section names cannot be blank: #{section}")

@@ -309,11 +309,17 @@ module IniFile
             ini[:header][:key].should eq 'value'
           end
 
-          #it 'throws an exception on whitespace within the section name' do
-            #lambda {
-              #subject.parse("[the\theader]\nkey=value")
-            #}.should raise_error(IniFormatError)
-          #end
+          it 'allows section names to be enclosed in double quotes' do
+            ini = subject.parse("[ \"header\" ]\nkey=value")
+            ini[:key].should be_nil
+            ini[:header][:key].should eq 'value'
+          end
+
+          it 'allows section names to be enclosed in single quotes' do
+            ini = subject.parse("[ 'header' ]\nkey=value")
+            ini[:key].should be_nil
+            ini[:header][:key].should eq 'value'
+          end
 
           it 'throws an exception on punctuation within the section name' do
             lambda {
