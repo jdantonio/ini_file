@@ -200,8 +200,58 @@ module IniFile
 
     context 'iterators' do
 
+      let(:contents) do
+        <<-DATA
+          ; this line is a comment
+          KEY1 = value1
+          key2 = "The second value"
+
+          [section_1]
+          key1-1: value1
+          key1-2: value2
+          key1-3: value3
+          key1-4: value4
+
+          [section_2]
+          key2-1: value1
+          key2-2: value2
+          key2-3: value3
+          key2-4: value4
+
+          [section_1.sub_1]
+          key = value
+
+          [section_1.sub_2]
+          key = value
+        DATA
+      end
+
+      let(:keys) { [ :key1, :key2 ] }
+      let(:sections) { [ :section_1, :section_2 ] }
+      let(:subsections) { [ :sub_1, :sub_2 ] }
+
+      subject { Contents.new(contents) }
+
       context '#each' do
-        pending
+
+        it 'iterates over each key/value pair in the global section' do
+          subject.each do |key, value|
+            keys.should include key
+          end
+        end
+
+        it 'returns the value associated with the current key' do
+          subject.each do |key, value|
+            subject[key].should eq value
+          end
+        end
+
+        it 'does not iterate over the sections' do
+          subject.each do |key, value|
+            sections.should_not include key
+          end
+        end
+
       end
 
       context '#each_section' do

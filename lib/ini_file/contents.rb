@@ -20,6 +20,12 @@ module IniFile
       return Marshal.load( Marshal.dump(@contents) )
     end
 
+    def each(&block)
+      @contents.each do |key, value|
+        yield(key, value) unless value.is_a? Hash
+      end
+    end
+
     def method_missing(method, *args, &block)
 
       key = method.to_s.downcase.to_sym
