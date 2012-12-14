@@ -9,12 +9,14 @@ require "ini_file/version"
 module IniFile
   extend self
 
-  def load(path)
-    #contents = File.open(path, 'r') {|f| f.read }
-    file = File.open(path, 'r')
-    contents = file.read
-    file.close
+  def load(path, safe = false)
+    contents = File.open(path, 'r') {|f| f.read }
     return Contents.new(contents)
+  rescue
+    if safe
+      return nil
+    else
+      raise $!
+    end
   end
-
 end

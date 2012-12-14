@@ -37,12 +37,15 @@ describe IniFile do
       File.open(filename, 'w') {|f| f.write(contents) }
       IniFile::Contents.stub(:new).with(any_args()).and_raise(StandardError.new('test exception'))
       lambda { subject.load(filename) }.should raise_error
-      subject.load(filename)
     end
 
     it 'returns the new contents object' do
       File.open(filename, 'w') {|f| f.write(contents) }
       IniFile.load(filename).should be_instance_of IniFile::Contents
+    end
+
+    it 'returns nil on error when safe is set to true' do
+      subject.load('file that does not exist', true).should be_nil
     end
 
   end
