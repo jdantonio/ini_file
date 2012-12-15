@@ -280,23 +280,20 @@ module IniFile
       context '#each for sections' do
 
         it 'iterates over each key/value pair in the given section' do
-          pending
           subject.section_1.each do |key, value|
             section_keys.should include key
           end
         end
 
         it 'returns the value associated with the current key' do
-          pending
           subject.section_1.each do |key, value|
             subject.section_1[key].should eq value
           end
         end
 
         it 'does not iterate over subsections of the given section' do
-          pending
           subject[:section_1].each do |key, value|
-            section_keys.should_not include key
+            subsections.should_not include key
           end
         end
 

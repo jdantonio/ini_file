@@ -90,6 +90,12 @@ module IniFile
         return current
       end
 
+      def each(&block)
+        value.each do |key, val|
+          yield(key, val) unless val.is_a? Hash
+        end
+      end
+
       def method_missing(method, *args, &block)
         key = method.to_s.downcase.to_sym
         if value[key].is_a? Hash
