@@ -37,9 +37,10 @@ describe IniFile do
     end
 
     it 'throws an exception on inadequate file permissions' do
-      pending 'FakeFS is not properly setting file permissions'
-      write_ini_file
-      FileUtils.chmod(0222, filename)
+      #pending 'FakeFS is not properly setting file permissions'
+      #write_ini_file
+      #FileUtils.chmod(0222, filename)
+      File.stub(:open).and_raise(Errno::EACCES)
       lambda { subject.load(filename) }.should raise_error
     end
 
