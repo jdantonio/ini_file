@@ -139,7 +139,7 @@ module IniFile
         end
 
         it 'converts sections to nodes' do
-          subject[:section_1].should be_kind_of IniFile::Contents::Node
+          subject[:section_1].should be_kind_of IniFile::Contents::Section
         end
 
         it 'converts section property keys to symbols in the section hash' do
@@ -151,11 +151,11 @@ module IniFile
         end
 
         it 'converts section hierarchies to node hierarchies' do
-          subject[:section_1].should be_kind_of IniFile::Contents::Node
-          subject[:section_1][:sub_1].should be_kind_of IniFile::Contents::Node
-          subject[:section_1][:sub_1][:sub_2].should be_kind_of IniFile::Contents::Node
-          subject[:section_1][:sub_1][:sub_2][:sub_3].should be_kind_of IniFile::Contents::Node
-          subject[:section_1][:sub_1][:sub_2][:sub_3][:sub_4].should be_kind_of IniFile::Contents::Node
+          subject[:section_1].should be_kind_of IniFile::Contents::Section
+          subject[:section_1][:sub_1].should be_kind_of IniFile::Contents::Section
+          subject[:section_1][:sub_1][:sub_2].should be_kind_of IniFile::Contents::Section
+          subject[:section_1][:sub_1][:sub_2][:sub_3].should be_kind_of IniFile::Contents::Section
+          subject[:section_1][:sub_1][:sub_2][:sub_3][:sub_4].should be_kind_of IniFile::Contents::Section
         end
 
       end
@@ -274,7 +274,7 @@ module IniFile
 
         it 'returns the node associated with the current section' do
           subject.each_section do |section|
-            section.should be_kind_of IniFile::Contents::Node
+            section.should be_kind_of IniFile::Contents::Section
           end
         end
 
@@ -318,7 +318,7 @@ module IniFile
 
         it 'returns the node associated with the current section' do
           subject.section_1.each_section do |section|
-            section.should be_kind_of IniFile::Contents::Node
+            section.should be_kind_of IniFile::Contents::Section
           end
         end
 

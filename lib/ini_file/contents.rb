@@ -14,7 +14,7 @@ module IniFile
 
     def [](key)
       if @contents[key].is_a? Hash
-        return Node.new(self, key)
+        return Section.new(self, key)
       else
         return @contents[key]
       end
@@ -32,7 +32,7 @@ module IniFile
 
     def each_section(&block)
       @contents.each do |key, value|
-        yield(Node.new(self, key)) if value.is_a? Hash
+        yield(Section.new(self, key)) if value.is_a? Hash
       end
     end
 
@@ -46,7 +46,7 @@ module IniFile
         elsif block_given?
           raise ArgumentError.new("block syntax not supported")
         elsif @contents[key].is_a? Hash
-          return Node.new(self, key)
+          return Section.new(self, key)
         else
           return @contents[key]
         end
@@ -61,7 +61,7 @@ module IniFile
     # :nodoc:
     #
     # Helper class for iterating contents using dynamic methods
-    class Node
+    class Section
 
       attr_reader :parent
       attr_reader :path
@@ -78,7 +78,7 @@ module IniFile
       def [](key)
         current = value[key]
         if current.is_a? Hash
-          return Node.new(parent, path, key)
+          return Section.new(parent, path, key)
         else
           return current
         end
@@ -98,14 +98,14 @@ module IniFile
 
       def each_section(&block)
         value.each do |key, val|
-          yield(Node.new(self, key)) if val.is_a? Hash
+          yield(Section.new(self, key)) if val.is_a? Hash
         end
       end
 
       def method_missing(method, *args, &block)
         key = method.to_s.downcase.to_sym
         if value[key].is_a? Hash
-          return Node.new(parent, path, method)
+          return Section.new(parent, path, method)
         elsif value[key].nil?
           super
         else
