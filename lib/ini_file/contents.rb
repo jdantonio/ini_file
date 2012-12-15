@@ -96,6 +96,12 @@ module IniFile
         end
       end
 
+      def each_section(&block)
+        value.each do |key, val|
+          yield(Node.new(self, key)) if val.is_a? Hash
+        end
+      end
+
       def method_missing(method, *args, &block)
         key = method.to_s.downcase.to_sym
         if value[key].is_a? Hash

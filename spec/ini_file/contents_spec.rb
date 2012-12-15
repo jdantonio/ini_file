@@ -219,10 +219,16 @@ module IniFile
           key2-4: value4
 
           [section_1.sub_1]
-          key = value
+          key1-1-1: value1
+          key1-1-2: value2
+          key1-1-3: value3
+          key1-1-4: value4
 
           [section_1.sub_2]
-          key = value
+          key1-2-1: value1
+          key1-2-2: value2
+          key1-2-3: value3
+          key1-2-4: value4
         DATA
       end
 
@@ -230,6 +236,9 @@ module IniFile
       let(:sections) { [ :section_1, :section_2 ] }
       let(:section_keys) { [ :key1_1, :key1_2, :key1_3, :key1_4 ] }
       let(:subsections) { [ :sub_1, :sub_2 ] }
+      let(:subsection_keys) { [ :key2_1, :key2_2, :key2_3, :key2_4 ] }
+      let(:subsection_1_keys) { [ :key1_1_1, :key1_1_2, :key1_1_3, :key1_1_4 ] }
+      let(:subsection_2_keys) { [ :key1_2_1, :key1_2_2, :key1_2_3, :key1_2_4 ] }
 
       subject { Contents.new(contents) }
 
@@ -294,6 +303,28 @@ module IniFile
         it 'does not iterate over subsections of the given section' do
           subject[:section_1].each do |key, value|
             subsections.should_not include key
+          end
+        end
+
+      end
+
+      context '#each_section for sections' do
+
+        it 'iterates over each section in the root' do
+          subject.section_1.each_section do |section|
+            subsections.should include section.name
+          end
+        end
+
+        it 'returns the node associated with the current section' do
+          subject.section_1.each_section do |section|
+            section.should be_kind_of IniFile::Contents::Node
+          end
+        end
+
+        it 'does not iterate over properties at the root' do
+          subject.section_1.each_section do |section|
+            subsection_keys.should_not include section.name
           end
         end
 
