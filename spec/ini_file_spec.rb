@@ -44,9 +44,9 @@ describe IniFile do
       lambda { subject.load(filename) }.should raise_error
     end
 
-    it 'passes the file contents to a new Contents object' do
+    it 'passes the file contents to a new Content object' do
       write_ini_file
-      IniFile::Contents.should_receive(:new).with(contents)
+      IniFile::Content.should_receive(:new).with(contents)
       subject.load(filename)
     end
 
@@ -55,15 +55,15 @@ describe IniFile do
       lambda { subject.load(File.join("~/#{filename}")) }.should_not raise_error
     end
 
-    it 'bubbles any exceptions thrown by the Contents constructor' do
+    it 'bubbles any exceptions thrown by the Content constructor' do
       File.open(filename, 'w') {|f| f.write(contents) }
-      IniFile::Contents.stub(:new).with(any_args()).and_raise(StandardError.new('test exception'))
+      IniFile::Content.stub(:new).with(any_args()).and_raise(StandardError.new('test exception'))
       lambda { subject.load(filename) }.should raise_error
     end
 
     it 'returns the new contents object' do
       File.open(filename, 'w') {|f| f.write(contents) }
-      IniFile.load(filename).should be_instance_of IniFile::Contents
+      IniFile.load(filename).should be_instance_of IniFile::Content
     end
 
     it 'returns nil on error when safe is set to true' do

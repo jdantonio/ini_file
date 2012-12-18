@@ -2,36 +2,36 @@ require 'ini_file/parser'
 
 module IniFile
 
-  class Contents
+  class Content
 
     def initialize(contents)
-      @contents = Parser.parse(contents)
+      @content = Parser.parse(contents)
     end
 
     def empty?
-      return @contents.empty?
+      return @content.empty?
     end
 
     def [](key)
-      if @contents[key].is_a? Hash
+      if @content[key].is_a? Hash
         return Section.new(self, key)
       else
-        return @contents[key]
+        return @content[key]
       end
     end
 
     def to_hash
-      return Marshal.load( Marshal.dump(@contents) )
+      return Marshal.load( Marshal.dump(@content) )
     end
 
     def each(&block)
-      @contents.each do |key, value|
+      @content.each do |key, value|
         yield(key, value) unless value.is_a? Hash
       end
     end
 
     def each_section(&block)
-      @contents.each do |key, value|
+      @content.each do |key, value|
         yield(Section.new(self, key)) if value.is_a? Hash
       end
     end
@@ -40,15 +40,15 @@ module IniFile
 
       key = method.to_s.downcase.to_sym
 
-      if @contents.has_key?(key)
+      if @content.has_key?(key)
         if args.count > 0
           raise ArgumentError.new("wrong number of arguments(#{args.count} for 0)")
         elsif block_given?
           raise ArgumentError.new("block syntax not supported")
-        elsif @contents[key].is_a? Hash
+        elsif @content[key].is_a? Hash
           return Section.new(self, key)
         else
-          return @contents[key]
+          return @content[key]
         end
       else
         super
@@ -85,7 +85,7 @@ module IniFile
       end
 
       def value
-        current = parent.instance_variable_get(:@contents)
+        current = parent.instance_variable_get(:@content)
         path.each { |node| current = current[node] }
         return current
       end
