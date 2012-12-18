@@ -11,7 +11,7 @@ module IniFile
 
   def load(path, safe = false)
     contents = File.open(File.expand_path(path), 'r') {|f| f.read }
-    return Content.new(contents)
+    return Content.parse(contents)
   rescue
     if safe
       return nil

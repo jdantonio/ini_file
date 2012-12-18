@@ -33,7 +33,7 @@ module IniFile
       it 'calls Parser.parse with the contents' do
         ini_contents = 'key=value'
         Parser.should_receive(:parse).with(ini_contents)
-        Content.new(ini_contents)
+        Content.parse(ini_contents)
       end
 
     end
@@ -42,7 +42,7 @@ module IniFile
 
       context 'attribute reader' do
 
-        subject { Content.new(contents) }
+        subject { Content.parse(contents) }
 
         it 'throws an ArgumentError if parameters are passed' do
           lambda { subject.key1(nil) }.should raise_error(ArgumentError)
@@ -122,7 +122,7 @@ module IniFile
 
       context '#[]' do
 
-        subject { Content.new(contents) }
+        subject { Content.parse(contents) }
 
         it 'converts global property keys to symbols at the root' do
           subject[:key1].should_not be_nil
@@ -139,7 +139,7 @@ module IniFile
         end
 
         it 'converts sections to nodes' do
-          subject[:section_1].should be_kind_of IniFile::Content::Section
+          subject[:section_1].should be_kind_of IniFile::Content
         end
 
         it 'converts section property keys to symbols in the section hash' do
@@ -151,18 +151,18 @@ module IniFile
         end
 
         it 'converts section hierarchies to node hierarchies' do
-          subject[:section_1].should be_kind_of IniFile::Content::Section
-          subject[:section_1][:sub_1].should be_kind_of IniFile::Content::Section
-          subject[:section_1][:sub_1][:sub_2].should be_kind_of IniFile::Content::Section
-          subject[:section_1][:sub_1][:sub_2][:sub_3].should be_kind_of IniFile::Content::Section
-          subject[:section_1][:sub_1][:sub_2][:sub_3][:sub_4].should be_kind_of IniFile::Content::Section
+          subject[:section_1].should be_kind_of IniFile::Content
+          subject[:section_1][:sub_1].should be_kind_of IniFile::Content
+          subject[:section_1][:sub_1][:sub_2].should be_kind_of IniFile::Content
+          subject[:section_1][:sub_1][:sub_2][:sub_3].should be_kind_of IniFile::Content
+          subject[:section_1][:sub_1][:sub_2][:sub_3][:sub_4].should be_kind_of IniFile::Content
         end
 
       end
 
       context '#to_hash' do
 
-        subject { Content.new(contents).to_hash }
+        subject { Content.parse(contents).to_hash }
 
         it 'converts global property keys to symbols at the root' do
           subject[:key1].should_not be_nil
@@ -240,7 +240,7 @@ module IniFile
       let(:subsection_1_keys) { [ :key1_1_1, :key1_1_2, :key1_1_3, :key1_1_4 ] }
       let(:subsection_2_keys) { [ :key1_2_1, :key1_2_2, :key1_2_3, :key1_2_4 ] }
 
-      subject { Content.new(contents) }
+      subject { Content.parse(contents) }
 
       context '#each' do
 
@@ -274,7 +274,7 @@ module IniFile
 
         it 'returns the node associated with the current section' do
           subject.each_section do |section|
-            section.should be_kind_of IniFile::Content::Section
+            section.should be_kind_of IniFile::Content
           end
         end
 
@@ -318,7 +318,7 @@ module IniFile
 
         it 'returns the node associated with the current section' do
           subject.section_1.each_section do |section|
-            section.should be_kind_of IniFile::Content::Section
+            section.should be_kind_of IniFile::Content
           end
         end
 

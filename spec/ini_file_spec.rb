@@ -44,9 +44,9 @@ describe IniFile do
       lambda { subject.load(filename) }.should raise_error
     end
 
-    it 'passes the file contents to a new Content object' do
+    it 'passes the file contents to the Parser' do
       write_ini_file
-      IniFile::Content.should_receive(:new).with(contents)
+      IniFile::Parser.should_receive(:parse).with(contents)
       subject.load(filename)
     end
 
@@ -55,10 +55,10 @@ describe IniFile do
       lambda { subject.load(File.join("~/#{filename}")) }.should_not raise_error
     end
 
-    it 'bubbles any exceptions thrown by the Content constructor' do
+    it 'bubbles any exceptions thrown by the Content parser' do
       File.open(filename, 'w') {|f| f.write(contents) }
-      IniFile::Content.stub(:new).with(any_args()).and_raise(StandardError.new('test exception'))
-      lambda { subject.load(filename) }.should raise_error
+      IniFile::Content.stub(:parse).with(any_args()).and_raise(StandardError.new('test exception'))
+      lambda { subject.load(filename) }.should raise_error(StandardError)
     end
 
     it 'returns the new contents object' do

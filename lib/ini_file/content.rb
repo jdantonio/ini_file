@@ -4,9 +4,7 @@ module IniFile
 
   class Content
 
-    def initialize(contents)
-      @content = Parser.parse(contents)
-    end
+    attr_reader :name
 
     def empty?
       return @content.empty?
@@ -14,7 +12,7 @@ module IniFile
 
     def [](key)
       if @content[key].is_a? Hash
-        return Section.new(self, key)
+        return Content.from_hash(key, @content[key])
       else
         return @content[key]
       end
@@ -32,7 +30,7 @@ module IniFile
 
     def each_section(&block)
       @content.each do |key, value|
-        yield(Section.new(self, key)) if value.is_a? Hash
+        yield(Content.from_hash(key, value)) if value.is_a? Hash
       end
     end
 
@@ -46,72 +44,33 @@ module IniFile
         elsif block_given?
           raise ArgumentError.new("block syntax not supported")
         elsif @content[key].is_a? Hash
-          return Section.new(self, key)
+          return Content.from_hash(key, @content[key])
         else
           return @content[key]
         end
       else
         super
       end
+    end
 
+    def self.parse(contents)
+      content = Content.new
+      content.instance_variable_set(:@content, Parser.parse(contents))
+      return content
     end
 
     private
 
-    # :nodoc:
-    #
-    # Helper class for iterating contents using dynamic methods
-    class Section
-
-      attr_reader :parent
-      attr_reader :path
-
-      def initialize(parent, *path)
-        @parent = parent
-        @path = path.flatten
-      end
-
-      def name
-        @path.first
-      end
-
-      def [](key)
-        current = value[key]
-        if current.is_a? Hash
-          return Section.new(parent, path, key)
-        else
-          return current
-        end
-      end
-
-      def value
-        current = parent.instance_variable_get(:@content)
-        path.each { |node| current = current[node] }
-        return current
-      end
-
-      def each(&block)
-        value.each do |key, val|
-          yield(key, val) unless val.is_a? Hash
-        end
-      end
-
-      def each_section(&block)
-        value.each do |key, val|
-          yield(Section.new(self, key)) if val.is_a? Hash
-        end
-      end
-
-      def method_missing(method, *args, &block)
-        key = method.to_s.downcase.to_sym
-        if value[key].is_a? Hash
-          return Section.new(parent, path, method)
-        elsif value[key].nil?
-          super
-        else
-          return value[key]
-        end
-      end
+    def initialize(name = nil)
+      @name = name
+      @content = {}
     end
+
+    def self.from_hash(name, contents)
+      content = Content.new(name)
+      content.instance_variable_set(:@content, contents)
+      return content
+    end
+
   end
 end
