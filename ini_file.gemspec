@@ -18,11 +18,7 @@ Gem::Specification.new do |s|
   s.test_files    = Dir['{spec}/**/*']
   s.require_paths = ['lib', 'lib/ini_file']
 
-  # Production dependencies
-  
-  s.add_dependency 'bundler'
-
-  # Development dependencies
+  s.add_development_dependency 'bundler'
   
   s.add_development_dependency 'debugger'
   s.add_development_dependency 'rake'
