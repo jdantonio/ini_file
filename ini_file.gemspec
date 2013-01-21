@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jerry D'Antonio"]
   s.email       = ['jerry.dantonio@gmail.com']
-  s.homepage    = 'http://www.jerryknowscode.com'
+  s.homepage    = 'https://github.com/jdantonio/ini_file'
   s.summary     = %q{Manage simple INI files.}
   s.description = %q{'The INI file format is an informal standard for configuration files for some platforms or software. INI files are simple text files with a basic structure composed of 'sections' and 'properties'.' - Wikipedia}
 
