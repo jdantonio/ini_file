@@ -13,4 +13,4 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = '-fd --color'
 end
 
-#task :default => [:default_task]
+task :default => [:spec]
