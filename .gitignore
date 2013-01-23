@@ -1,8 +1,14 @@
+tests.txt
+Gemfile.lock
 *.gem
 .rvmrc
 .bundle/*
+.yardoc/*
+doc/*
 tmp/*
+man/*
 *.tmproj
+*.sqlite3
 rdoc/*
 *.orig
 *.BACKUP.*
@@ -16,3 +22,6 @@ TAGS
 tmtags
 *.swo
 *.swp
+.idea
+*.py
+*.pyc
