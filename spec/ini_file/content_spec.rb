@@ -268,7 +268,7 @@ module IniFile
 
         it 'iterates over each section in the root' do
           subject.each_section do |section|
-            sections.should include section.name
+            sections.should include section.__name__
           end
         end
 
@@ -280,7 +280,7 @@ module IniFile
 
         it 'does not iterate over properties at the root' do
           subject.each_section do |section|
-            keys.should_not include section.name
+            keys.should_not include section.__name__
           end
         end
 
@@ -312,7 +312,7 @@ module IniFile
 
         it 'iterates over each section in the root' do
           subject.section_1.each_section do |section|
-            subsections.should include section.name
+            subsections.should include section.__name__
           end
         end
 
@@ -324,7 +324,7 @@ module IniFile
 
         it 'does not iterate over properties at the root' do
           subject.section_1.each_section do |section|
-            subsection_keys.should_not include section.name
+            subsection_keys.should_not include section.__name__
           end
         end
 

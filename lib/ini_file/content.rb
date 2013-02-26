@@ -4,7 +4,7 @@ module IniFile
 
   class Content
 
-    attr_reader :name
+    attr_reader :__name__
 
     def empty?
       return @content.empty?
@@ -62,7 +62,7 @@ module IniFile
     private
 
     def initialize(name = nil)
-      @name = name
+      @__name__ = name
       @content = {}
     end
 
