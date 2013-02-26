@@ -31,7 +31,6 @@ module IniFile
         it 'throws an exception if the first argument is not a string' do
           lambda { subject.parse(123) }.should raise_error(ArgumentError)
         end
-
       end
 
       context 'return value' do
@@ -43,7 +42,6 @@ module IniFile
         it 'is an empty hash when the content is only comments' do
           subject.parse('; this is a comment').should be_empty
         end
-
       end
 
       context 'content' do
@@ -163,13 +161,6 @@ module IniFile
             ini = subject.parse('key=This is the VALUE')
             ini[:key].should eq 'This is the VALUE'
           end
-
-          it 'allows line continuation when a line ends with a backslash' do
-            pending
-            ini = subject.parse("key=this\\\nvalue")
-            ini[:key].should eq 'this value'
-          end
-
         end
 
         context 'escape sequences' do
@@ -228,7 +219,6 @@ module IniFile
             ini = subject.parse("key=this\\u1234value")
             ini[:key].should eq "this\u1234value"
           end
-
         end
 
         context 'comments' do
@@ -289,7 +279,6 @@ module IniFile
             ini[:key1].should eq 'value1'
             ini[:key2].should eq 'value2'
           end
-
         end
 
         context 'sections' do
@@ -444,7 +433,6 @@ module IniFile
               subject.parse("[this.is\\the/section,header]")
             }.should raise_error(IniFormatError)
           end
-
         end
 
         context 'multiple lines' do
@@ -465,7 +453,6 @@ module IniFile
             ini[:key1].should eq 'value1'
             ini[:key2].should eq 'value2'
           end
-
         end
 
         context 'garbage' do
@@ -475,7 +462,6 @@ module IniFile
               subject.parse('this line is garbage')
             }.should raise_error(IniFormatError)
           end
-
         end
 
         context 'property data types' do
@@ -492,7 +478,6 @@ module IniFile
             ini[:key1].should be_within(0.1).of(123.45)
           end
         end
-
       end
     end
   end
