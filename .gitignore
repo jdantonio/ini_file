@@ -1,3 +1,5 @@
+.ruby-version
+.ruby-gemset
 tests.txt
 Gemfile.lock
 *.gem

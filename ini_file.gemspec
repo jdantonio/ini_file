@@ -34,16 +34,4 @@ Gem::Specification.new do |s|
   EOF
 
   s.add_development_dependency 'bundler'
-  s.add_development_dependency 'rake'
-
-  s.add_development_dependency 'simplecov'
-  s.add_development_dependency 'rspec'
-  
-  s.add_development_dependency 'fakefs'
-
-  unless RbConfig::CONFIG['ruby_install_name']=~ /^jruby$/i
-    s.add_development_dependency 'yard'
-    s.add_development_dependency 'redcarpet'
-    #s.add_development_dependency 'github-markup'
-  end
 end

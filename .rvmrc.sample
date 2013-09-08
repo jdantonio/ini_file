@@ -1,4 +1,0 @@
-rvm use ruby-2.0.0-p0@ini_file --create
-
-# put the gem bin directory in our path
-export PATH=./bin:$PATH
