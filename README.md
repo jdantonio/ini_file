@@ -1,5 +1,5 @@
 # INI File
-[![Build Status](https://secure.travis-ci.org/jdantonio/ini_file.png)](http://travis-ci.org/jdantonio/ini_file?branch=master) [![Dependency Status](https://gemnasium.com/jdantonio/ini_file.png)](https://gemnasium.com/jdantonio/ini_file)
+[![Build Status](https://secure.travis-ci.org/jdantonio/ini_file.png)](http://travis-ci.org/jdantonio/ini_file?branch=master) [![Coverage Status](https://coveralls.io/repos/jdantonio/ini_file/badge.png?branch=master)](https://coveralls.io/r/jdantonio/ini_file?branch=master) [![Dependency Status](https://gemnasium.com/jdantonio/ini_file.png)](https://gemnasium.com/jdantonio/ini_file)
 
 A simple gem for reading INI files. Originally written because I wanted to read
 my Git config file in Ruby programs. Now supports virtually all features described
